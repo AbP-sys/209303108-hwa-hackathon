@@ -26,7 +26,9 @@ type StripeLike = {
 };
 
 const stripePromise = loadStripe(
-  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || ""
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ||
+    process.env.STRIPE_TEST_KEY ||
+    ""
 );
 
 function Confetti({ visible }: { visible: boolean }) {
@@ -184,7 +186,7 @@ export default function CheckoutPage() {
           <Link href="/" className="flex items-center gap-2">
             <ArrowLeft className="w-5 h-5 text-amigo-text-muted" />
             <span className="font-amigo font-bold text-lg text-amigo-text">
-              Back to Amigo
+              Back to home
             </span>
           </Link>
           <div className="flex items-center gap-2 bg-white/50 px-3 py-1 rounded-full backdrop-blur-sm border border-amigo-border/30">

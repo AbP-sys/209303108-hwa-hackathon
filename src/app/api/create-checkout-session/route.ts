@@ -14,7 +14,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Invalid plan" }, { status: 400 });
     }
 
-    const secretKey = process.env.STRIPE_SECRET_KEY;
+    const secretKey = process.env.STRIPE_TEST_KEY || process.env.STRIPE_SECRET_KEY || "";
     if (!secretKey) {
       // Demo mode: return a mock session id for hackathon testing
       return NextResponse.json({
