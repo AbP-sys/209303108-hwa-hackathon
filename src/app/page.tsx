@@ -217,7 +217,6 @@ export default function Home() {
                 name: "Monthly subscription",
                 price: "$20",
                 unit: "/month",
-                desc: "A playful subscription that renews every month.",
                 popular: false,
                 features: ["Amigo companion", "Monthly treat drops", "App access", "Community events"],
               },
@@ -225,7 +224,6 @@ export default function Home() {
                 name: "Lifetime access",
                 price: "$500",
                 unit: "",
-                desc: "One-time purchase. Amigo is yours for life.",
                 popular: true,
                 features: ["Amigo companion", "All accessories", "Lifetime app access", "Priority support"],
               },
@@ -237,30 +235,28 @@ export default function Home() {
                 viewport={{ once: true }}
                 whileHover={{ y: -6 }}
                 className={[
-                  "group relative rounded-[3rem] p-8 border shadow-sm transition-all duration-300",
-                  "bg-gradient-to-b from-amigo-surface via-white",
+                  "group relative rounded-[3rem] p-8 border shadow-sm transition-all duration-300 flex flex-col",
                   plan.popular
                     ? "border-amigo-primary shadow-amigo-glow bg-gradient-to-br from-amigo-primary via-amigo-secondary text-white"
-                    : "border-amigo-border text-amigo-text",
+                    : "border-amigo-border text-amigo-text bg-amigo-surface",
                 ].join(" ")}
               >
-                <CardHeader className="pt-8">
+                <CardHeader className="pt-8 flex-1">
                   {plan.popular && (
-                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 flex items-center gap-1 bg-amigo-primary text-white px-3 py-1 rounded-full text-xs font-bold shadow-amigo-secondary-glow">
-                      <span className="w-2 h-2 bg-white rounded-full animate-pulse" />
+                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 flex items-center gap-1 bg-amigo-surface text-amigo-primary px-3 py-1 rounded-full text-xs font-bold shadow-amigo-secondary-glow">
+                      <span className="w-2 h-2 bg-amigo-primary rounded-full animate-pulse" />
                       Best value
                     </div>
                   )}
-                  <CardTitle className="mb-1 text-amigo-text">{plan.name}</CardTitle>
-                  <CardDescription className="text-amigo-text-muted">{plan.desc}</CardDescription>
+                  <CardTitle className="mb-1">{plan.name}</CardTitle>
                 </CardHeader>
                 <CardContent className="flex-1 flex flex-col">
-                  <div className="mb-6 text-5xl font-amigo font-bold text-amigo-text">{plan.price}<span className="text-2xl text-amigo-text-muted">{plan.unit}</span></div>
-                  <ul className="space-y-3 text-sm text-amigo-text-muted flex-1">
+                  <div className="mb-6 text-5xl font-amigo font-bold">{plan.price}<span className="text-2xl">{plan.unit}</span></div>
+                  <ul className="space-y-3 text-sm flex-1">
                     {plan.features.map((f) => (
                       <li key={f} className="flex items-center gap-2">
-                        <PawPrint className="w-4 h-4 text-amigo-primary/40 shrink-0" />
-                        <span className={plan.popular ? "text-amigo-surface/90" : "text-amigo-text-muted"}>{f}</span>
+                        <PawPrint className="w-4 h-4 shrink-0" />
+                        <span>{f}</span>
                       </li>
                     ))}
                   </ul>
