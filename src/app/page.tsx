@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import {
@@ -53,6 +53,7 @@ const featureList = [
 ];
 
 export default function Home() {
+  const [orderConfetti, setOrderConfetti] = useState({ visible: false, count: 0 });
   return (
     <div className="relative min-h-screen flex flex-col overflow-x-hidden bg-amigo-bg text-amigo-text selection:bg-amigo-primary/30">
       <SyntraHero />
@@ -207,24 +208,24 @@ export default function Home() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="font-amigo font-bold text-3xl md:text-5xl mb-4 text-amigo-text">Bring Amigo home</h2>
+            <h2 className="font-amigo font-bold text-3xl md:text-5xl mb-2 text-amigo-text">Bring Amigo home</h2>
             <p className="text-amigo-text-muted max-w-2xl mx-auto text-lg">Pick the plan that fits you and your pet.</p>
           </motion.div>
           <div className="grid md:grid-cols-2 gap-8">
             {[
               {
-                name: "Amigo Monthly",
+                name: "Monthly subscription",
                 price: "$20",
                 unit: "/month",
-                desc: "A playful subscription that keeps the fun going every month.",
+                desc: "A playful subscription that renews every month.",
                 popular: false,
                 features: ["Amigo companion", "Monthly treat drops", "App access", "Community events"],
               },
               {
-                name: "Amigo Forever",
+                name: "Lifetime access",
                 price: "$500",
                 unit: "",
-                desc: "One-time purchase. Amigo is yours for life — no recurring fees.",
+                desc: "One-time purchase. Amigo is yours for life.",
                 popular: true,
                 features: ["Amigo companion", "All accessories", "Lifetime app access", "Priority support"],
               },
@@ -234,9 +235,13 @@ export default function Home() {
                 variants={itemVariants}
                 whileInView={{ ...itemVariants.visible }}
                 viewport={{ once: true }}
+                whileHover={{ y: -6 }}
                 className={[
-                  "flex flex-col group relative rounded-3xl bg-amigo-surface border border-amigo-border shadow-sm hover:border-amigo-primary/50 hover:shadow-amigo-glow transition-all duration-300",
-                  plan.popular ? "border-amigo-primary shadow-amigo-glow" : "",
+                  "group relative rounded-[3rem] p-8 border shadow-sm transition-all duration-300",
+                  "bg-gradient-to-b from-amigo-surface via-white",
+                  plan.popular
+                    ? "border-amigo-primary shadow-amigo-glow bg-gradient-to-br from-amigo-primary via-amigo-secondary text-white"
+                    : "border-amigo-border text-amigo-text",
                 ].join(" ")}
               >
                 <CardHeader className="pt-8">
@@ -246,16 +251,16 @@ export default function Home() {
                       Best value
                     </div>
                   )}
-                  <CardTitle className="mb-1">{plan.name}</CardTitle>
-                  <CardDescription>{plan.desc}</CardDescription>
+                  <CardTitle className="mb-1 text-amigo-text">{plan.name}</CardTitle>
+                  <CardDescription className="text-amigo-text-muted">{plan.desc}</CardDescription>
                 </CardHeader>
                 <CardContent className="flex-1 flex flex-col">
-                  <div className="mb-6 text-4xl font-amigo font-bold text-amigo-text">{plan.price}<span className="text-lg text-amigo-text-muted">{plan.unit}</span></div>
+                  <div className="mb-6 text-5xl font-amigo font-bold text-amigo-text">{plan.price}<span className="text-2xl text-amigo-text-muted">{plan.unit}</span></div>
                   <ul className="space-y-3 text-sm text-amigo-text-muted flex-1">
                     {plan.features.map((f) => (
                       <li key={f} className="flex items-center gap-2">
                         <PawPrint className="w-4 h-4 text-amigo-primary/40 shrink-0" />
-                        {f}
+                        <span className={plan.popular ? "text-amigo-surface/90" : "text-amigo-text-muted"}>{f}</span>
                       </li>
                     ))}
                   </ul>
@@ -304,10 +309,12 @@ export default function Home() {
               </div>
             </div>
 
-            <OrderForm />
+            <OrderForm setOrderConfetti={setOrderConfetti} />
           </div>
         </div>
       </motion.section>
+
+      <ConfettiPopup visible={orderConfetti.visible} count={orderConfetti.count} setOrderConfetti={setOrderConfetti} />
 
       <footer className="border-y border-amigo-border bg-amigo-surface py-10">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
@@ -322,7 +329,7 @@ export default function Home() {
   );
 }
 
-function OrderForm() {
+function OrderForm({ setOrderConfetti }: { setOrderConfetti: (v: { visible: boolean; count: number }) => void }) {
   const [submitting, setSubmitting] = useState(false);
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
 
@@ -343,6 +350,7 @@ function OrderForm() {
       });
       if (res.ok) {
         setStatus("success");
+        setOrderConfetti({ visible: true, count: 1 });
         (e.currentTarget as HTMLFormElement).reset();
       } else {
         setStatus("error");
@@ -357,11 +365,17 @@ function OrderForm() {
   if (status === "success") {
     return (
       <div className="text-center py-8 animate-bounce">
-        <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-amigo-glow">
-          <PawPrint className="w-8 h-8 text-white" />
+        <div className="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-[0_0_30px_rgba(34,197,94,0.6)]">
+          <PawPrint className="w-10 h-10 text-white" />
         </div>
-        <h3 className="font-amigo font-bold text-xl mb-2">Woof! Order placed 🐾</h3>
-        <p className="text-amigo-primary/20">Amigo is on the way to your pet.</p>
+        <h3 className="font-amigo font-bold text-xl mb-2 text-amigo-text">Woof! Order placed 🐾</h3>
+        <p className="text-amigo-primary text-sm">Amigo is on the way to your pet.</p>
+        <button
+          onClick={() => setStatus("idle")}
+          className="mt-6 text-xs font-bold text-amigo-primary/80 hover:text-amigo-primary underline"
+        >
+          Place another order
+        </button>
       </div>
     );
   }
@@ -399,19 +413,83 @@ function OrderForm() {
         />
       </div>
       <div>
-        <label className="block text-xs font-bold text-white/80 mb-1">Choose your Amigo</label>
+        <label className="block text-xs font-bold text-white/80 mb-1">Choose your plan</label>
         <select
           name="plan"
           className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white focus:ring-2 focus:ring-amigo-primary outline-none transition-all"
         >
-          <option value="starter">Amigo Starter — $49</option>
-          <option value="buddy">Amigo Buddy — $79</option>
-          <option value="pal">Amigo Pal — $119</option>
+          <option value="monthly">Monthly subscription — $20/month</option>
+          <option value="lifetime">Lifetime access — $500</option>
         </select>
       </div>
       <Button type="submit" variant="play" size="lg" className="w-full" disabled={submitting}>
         {submitting ? "Placing order…" : "Get Amigo"}
       </Button>
     </form>
+  );
+}
+
+function ConfettiPopup({ visible, count, setOrderConfetti }: { visible: boolean; count: number; setOrderConfetti: (v: { visible: boolean; count: number }) => void }) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    if (!visible || !canvasRef.current) return;
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+
+    const particles: Array<{ x: number; y: number; vx: number; vy: number; color: string; size: number; angle: number }> = [];
+    const colors = ["#f97316", "#ec4899", "#22d3ee", "#86efac", "#fbbf24", "#a78bfa"];
+    const particleCount = 120 + count * 20;
+
+    for (let i = 0; i < particleCount; i++) {
+      particles.push({
+        x: width / 2,
+        y: height / 2,
+        vx: (Math.random() - 0.5) * 20,
+        vy: (Math.random() - 0.5) * 20 - 5,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        size: Math.random() * 8 + 4,
+        angle: Math.random() * Math.PI * 2,
+      });
+    }
+
+    let opacity = 1;
+    const animate = () => {
+      ctx.clearRect(0, 0, width, height);
+      opacity -= 0.015;
+      if (opacity <= 0) {
+        setOrderConfetti({ visible: false, count: 0 });
+        return;
+      }
+      particles.forEach((p) => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.4;
+        p.angle += 0.1;
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.angle);
+        ctx.globalAlpha = opacity;
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+        ctx.restore();
+      });
+      requestAnimationFrame(animate);
+    };
+    animate();
+  }, [visible, count, setOrderConfetti]);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="fixed inset-0 z-[100] pointer-events-none"
+      style={{ display: visible ? "block" : "none" }}
+    />
   );
 }
