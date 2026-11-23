@@ -5,7 +5,6 @@ import { loadStripe } from "@stripe/stripe-js";
 import { motion } from "framer-motion";
 import { ArrowLeft, Heart, PawPrint } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { AmigoSVG } from "@/components/AmigoSVG";
 
@@ -96,12 +95,11 @@ function Confetti({ visible }: { visible: boolean }) {
 }
 
 export default function CheckoutPage() {
-  const router = useRouter();
-  const planFromUrl =
+  const urlPlan =
     typeof window !== "undefined"
       ? new URLSearchParams(window.location.search).get("plan")
       : null;
-  const planKey = planFromUrl === "lifetime" ? "lifetime" : "monthly";
+  const planKey = urlPlan === "lifetime" ? "lifetime" : "monthly";
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
 
@@ -139,10 +137,17 @@ export default function CheckoutPage() {
     }
   };
 
+  const urlSuccess =
+    typeof window !== "undefined"
+      ? new URLSearchParams(window.location.search).get("success")
+      : null;
+  const showConfetti = status === "success" || urlSuccess === "true";
+  const bubbleText = status === "success" || urlSuccess === "true" ? "YAYY!!" : "Adopt me";
+
   if (status === "success") {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-amigo-bg text-amigo-text">
-        <Confetti visible />
+        <Confetti visible={showConfetti} />
         <motion.div
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
@@ -161,7 +166,9 @@ export default function CheckoutPage() {
             variant="play"
             size="lg"
             className="w-auto"
-            onClick={() => router.push("/")}
+            onClick={() => {
+              window.location.href = "/";
+            }}
           >
             OK
           </Button>
@@ -207,7 +214,7 @@ export default function CheckoutPage() {
                 className="absolute -top-4 -right-4 flex items-center gap-2 bg-white border border-teal-200 rounded-full px-4 py-2 shadow-amigo-glow animate-pulse"
               >
                 <PawPrint className="w-4 h-4 text-teal-400 fill-teal-400" />
-                <span className="text-xs font-bold text-amigo-text">YAYY!!</span>
+                <span className="text-xs font-bold text-amigo-text">{bubbleText}</span>
               </motion.div>
             </div>
           </div>
