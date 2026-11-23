@@ -5,7 +5,6 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import {
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -297,7 +296,7 @@ export default function Home() {
             <div className="flex items-center justify-between mb-8">
               <div>
                 <h2 className="font-amigo font-bold text-3xl mb-2">Ready to meet Amigo?</h2>
-                <p className="text-amigo-primary/20 text-lg">Place your order in under a minute.</p>
+                
               </div>
               <div className="flex items-center gap-2 bg-white/10 px-3 py-1 rounded-full backdrop-blur-sm border border-white/20">
                 <Heart className="w-4 h-4 text-amigo-primary animate-pulse" />
