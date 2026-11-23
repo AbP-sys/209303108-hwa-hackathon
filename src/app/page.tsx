@@ -235,14 +235,15 @@ export default function Home() {
                 whileHover={{ y: -6 }}
                 className={[
                   "group relative rounded-[3rem] p-8 border shadow-sm transition-all duration-300 flex flex-col",
+                  "border-amigo-border text-amigo-text bg-amigo-surface",
                   plan.popular
-                    ? "border-amigo-primary shadow-amigo-glow bg-gradient-to-br from-amigo-primary via-amigo-secondary text-white"
-                    : "border-amigo-border text-amigo-text bg-amigo-surface",
+                    ? "border-amigo-primary shadow-amigo-glow ring-2 ring-amigo-primary/20"
+                    : "",
                 ].join(" ")}
               >
-                <CardHeader className="pt-8 flex-1">
+                <CardHeader className="pt-8 flex-1 pt-12">
                   {plan.popular && (
-                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 flex items-center gap-1 bg-amigo-surface text-amigo-primary px-3 py-1 rounded-full text-xs font-bold shadow-amigo-secondary-glow">
+                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 flex items-center gap-1 bg-amigo-surface text-amigo-primary px-3 py-1 rounded-full text-xs font-bold shadow-sm border border-amigo-primary/50">
                       <span className="w-2 h-2 bg-amigo-primary rounded-full animate-pulse" />
                       Best value
                     </div>
@@ -262,7 +263,7 @@ export default function Home() {
                 </CardContent>
                 <CardFooter>
                   <Button
-                    variant={plan.popular ? "play" : "outline"}
+                    variant={plan.popular ? "outline" : "play"}
                     className="w-full"
                     onClick={() => document.getElementById("order")?.scrollIntoView({ behavior: "smooth" })}
                   >
