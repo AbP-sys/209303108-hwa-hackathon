@@ -57,7 +57,7 @@ export default function Home() {
     <div className="relative min-h-screen flex flex-col overflow-x-hidden bg-amigo-bg text-amigo-text selection:bg-amigo-primary/30">
       <SyntraHero />
 
-      <main className="flex-1 relative pt-24 pb-20">
+      <main className="flex-1 relative pb-20">
         {/* Features */}
         <motion.section
           id="features"
@@ -65,7 +65,7 @@ export default function Home() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="px-6 max-w-7xl mx-auto py-24 relative"
+          className="px-6 max-w-7xl mx-auto relative"
         >
           <motion.div
             initial={{ opacity: 0, y: 20 }}

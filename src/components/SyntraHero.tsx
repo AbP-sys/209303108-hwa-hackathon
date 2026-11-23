@@ -22,7 +22,7 @@ export function SyntraHero({ className = "" }: { className?: string }) {
   return (
     <section
       className={[
-        "relative min-h-[70vh] flex flex-col overflow-hidden bg-amigo-bg",
+        "relative min-h-[55vh] flex flex-col overflow-hidden bg-amigo-bg",
         className,
       ].join(" ")}
     >
