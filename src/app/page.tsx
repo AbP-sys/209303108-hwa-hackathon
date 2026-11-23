@@ -235,10 +235,10 @@ export default function Home() {
                 whileHover={{ y: -6 }}
                 className={[
                   "group relative rounded-[3rem] p-8 border shadow-amigo-glow transition-all duration-300 flex flex-col",
-                  "border-amigo-primary/30 text-amigo-text bg-amigo-surface",
+                  "border-amigo-primary text-amigo-text bg-amigo-surface",
                   plan.popular
-                    ? "border-amigo-primary shadow-[0_0_40px_rgba(34,211,238,0.5)] ring-2 ring-amigo-primary/40"
-                    : "border-amigo-primary/50 shadow-amigo-glow",
+                    ? "border-amigo-primary shadow-[0_0_60px_rgba(34,211,238,0.7)] ring-2 ring-amigo-primary/60"
+                    : "border-amigo-primary shadow-amigo-glow",
                 ].join(" ")}
               >
                 <CardHeader className="pt-16 flex-1">
@@ -441,16 +441,16 @@ function ConfettiPopup({ visible, count, setOrderConfetti }: { visible: boolean;
 
     const particles: Array<{ x: number; y: number; vx: number; vy: number; color: string; size: number; angle: number }> = [];
     const colors = ["#f97316", "#ec4899", "#22d3ee", "#86efac", "#fbbf24", "#a78bfa"];
-    const particleCount = 120 + count * 20;
+    const particleCount = 200 + count * 30;
 
     for (let i = 0; i < particleCount; i++) {
       particles.push({
         x: width / 2,
         y: height / 2,
-        vx: (Math.random() - 0.5) * 20,
-        vy: (Math.random() - 0.5) * 20 - 5,
+        vx: (Math.random() - 0.5) * 30,
+        vy: (Math.random() - 0.5) * 30 - 10,
         color: colors[Math.floor(Math.random() * colors.length)],
-        size: Math.random() * 8 + 4,
+        size: Math.random() * 12 + 6,
         angle: Math.random() * Math.PI * 2,
       });
     }
@@ -458,7 +458,7 @@ function ConfettiPopup({ visible, count, setOrderConfetti }: { visible: boolean;
     let opacity = 1;
     const animate = () => {
       ctx.clearRect(0, 0, width, height);
-      opacity -= 0.015;
+      opacity -= 0.01;
       if (opacity <= 0) {
         setOrderConfetti({ visible: false, count: 0 });
         return;
@@ -466,7 +466,7 @@ function ConfettiPopup({ visible, count, setOrderConfetti }: { visible: boolean;
       particles.forEach((p) => {
         p.x += p.vx;
         p.y += p.vy;
-        p.vy += 0.4;
+        p.vy += 0.2;
         p.angle += 0.1;
         ctx.save();
         ctx.translate(p.x, p.y);
