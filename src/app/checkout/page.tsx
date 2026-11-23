@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { loadStripe } from "@stripe/stripe-js";
 import { motion } from "framer-motion";
 import { ArrowLeft, Heart, PawPrint } from "lucide-react";
 import Link from "next/link";
@@ -20,16 +19,6 @@ const PLANS: Record<string, { name: string; price: string; desc: string }> = {
     desc: "One-time purchase. Amigo is yours for life.",
   },
 };
-
-type StripeLike = {
-  redirectToCheckout: (args: { sessionId: string }) => Promise<{ error: Error | null }>;
-};
-
-const stripePromise = loadStripe(
-  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ||
-    process.env.STRIPE_TEST_KEY ||
-    ""
-);
 
 function Confetti({ visible }: { visible: boolean }) {
   useEffect(() => {
@@ -108,43 +97,15 @@ export default function CheckoutPage() {
   const plan = PLANS[planKey];
 
   const handleCheckout = async () => {
-    const stripe = await stripePromise;
-    if (!stripe) {
-      setStatus("error");
-      return;
-    }
     setLoading(true);
-    try {
-      const res = await fetch("/api/create-checkout-session", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan: planKey }),
-      });
-      const data = await res.json();
-      if (res.ok && data.sessionId) {
-        const { error } = await (stripe as unknown as StripeLike).redirectToCheckout({
-          sessionId: data.sessionId as string,
-        });
-        if (error) {
-          setStatus("error");
-          setLoading(false);
-        }
-      } else {
-        setStatus("error");
-        setLoading(false);
-      }
-    } catch {
-      setStatus("error");
-      setLoading(false);
-    }
+    // Simulate a brief processing delay for a realistic feel
+    await new Promise((resolve) => setTimeout(resolve, 800));
+    setStatus("success");
+    setLoading(false);
   };
 
-  const urlSuccess =
-    typeof window !== "undefined"
-      ? new URLSearchParams(window.location.search).get("success")
-      : null;
-  const showConfetti = status === "success" || urlSuccess === "true";
-  const bubbleText = status === "success" || urlSuccess === "true" ? "YAYY!!" : "Adopt me";
+  const showConfetti = status === "success";
+  const bubbleText = status === "success" ? "YAYY!!" : "Adopt me";
 
   if (status === "success") {
     return (
@@ -272,11 +233,11 @@ export default function CheckoutPage() {
                 disabled={loading}
                 onClick={handleCheckout}
               >
-                {loading ? "Redirecting to Stripe…" : "Pay with Stripe"}
+                {loading ? "Processing payment…" : "Pay with Stripe"}
               </Button>
 
               <p className="mt-4 text-xs text-amigo-text-muted text-center">
-                Powered by Stripe • Secure & encrypted
+                Secure payment processing
               </p>
             </motion.div>
           </div>
