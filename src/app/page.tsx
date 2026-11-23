@@ -71,7 +71,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ ...itemVariants.visible }}
             viewport={{ once: true }}
-            className="text-center mb-16"
+            className="text-center mb-8"
           >
             <h2 className="font-amigo font-bold text-3xl md:text-5xl mb-4 text-amigo-text">Built for connection</h2>
             <p className="text-amigo-text-muted max-w-2xl mx-auto text-lg">Every detail is designed to help you and your pet feel at home.</p>
@@ -84,13 +84,14 @@ export default function Home() {
                 variants={itemVariants}
                 whileInView={{ ...itemVariants.visible }}
                 viewport={{ once: true }}
+                whileHover={{ y: -6, scale: 1.02 }}
                 className={[
-                  "group relative p-6 rounded-3xl bg-amigo-surface border border-amigo-border shadow-sm",
-                  "hover:border-amigo-primary/50 hover:shadow-amigo-glow transition-all duration-300",
+                  "group relative p-5 rounded-3xl border border-white/30 bg-amigo-surface/60 backdrop-blur-md shadow-sm",
+                  "hover:border-amigo-primary/60 hover:bg-amigo-surface/80 transition-all duration-300",
                 ].join(" ")}
               >
-                <div className="w-12 h-12 rounded-2xl bg-amigo-primary/10 border border-amigo-border flex items-center justify-center mb-4 group-hover:bg-amigo-primary group-hover:text-white transition-colors duration-300">
-                  <f.icon className="w-6 h-6 text-amigo-primary group-hover:text-white" />
+                <div className="w-10 h-10 rounded-2xl border border-white/30 bg-white/20 backdrop-blur-sm flex items-center justify-center mb-3 group-hover:bg-amigo-primary group-hover:text-white transition-colors duration-300">
+                  <f.icon className="w-5 h-5 text-amigo-primary group-hover:text-white" />
                 </div>
                 <h3 className="font-amigo font-bold text-lg mb-2 text-amigo-text">{f.title}</h3>
                 <p className="text-sm text-amigo-text-muted leading-relaxed">{f.desc}</p>
@@ -106,31 +107,31 @@ export default function Home() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="px-6 max-w-7xl mx-auto py-24 bg-amigo-surface rounded-[3rem] my-16 border border-amigo-border overflow-hidden relative"
+          className="px-6 max-w-7xl mx-auto py-16 bg-amigo-surface rounded-[3rem] my-12 border border-amigo-border overflow-hidden relative"
         >
-          <div className="grid lg:grid-cols-2 gap-16 items-center p-8">
+          <div className="grid lg:grid-cols-2 gap-6 items-center p-4">
             <div className="relative z-10">
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                className="mb-8"
+                className="mb-4"
               >
-                <h2 className="font-amigo font-bold text-3xl md:text-4xl mb-4 text-amigo-text">Moments that wag</h2>
+                <h2 className="font-amigo font-bold text-3xl md:text-4xl mb-3 text-amigo-text">Moments that wag</h2>
               </motion.div>
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.2 }}
-                className="mb-8"
+                className="mb-4"
               >
-                <p className="text-amigo-text-muted mb-8 text-lg leading-relaxed">
+                <p className="text-amigo-text-muted mb-4 text-sm leading-relaxed">
                   From the first unboxing to every playful nudge, Amigo responds with movement, light,
                   and a personality that grows on you.
                 </p>
               </motion.div>
-              <div className="space-y-4">
+              <div className="space-y-2">
                 {[
                   {
                     icon: LayoutGrid,
