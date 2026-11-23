@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { motion } from "framer-motion";
 import { ArrowLeft, Heart, PawPrint } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { AmigoSVG } from "@/components/AmigoSVG";
 
@@ -29,7 +30,73 @@ const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || ""
 );
 
+function Confetti({ visible }: { visible: boolean }) {
+  useEffect(() => {
+    if (!visible) return;
+    const canvas = document.createElement("canvas");
+    document.body.appendChild(canvas);
+    canvas.style.position = "fixed";
+    canvas.style.inset = "0";
+    canvas.style.width = "100vw";
+    canvas.style.height = "100vh";
+    canvas.style.zIndex = "9999";
+    canvas.style.pointerEvents = "none";
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+
+    const colors = ["#f97316", "#ec4899", "#22d3ee", "#86efac", "#fbbf24", "#a78bfa"];
+    const particles: Array<{ x: number; y: number; vx: number; vy: number; color: string; size: number; angle: number }> = [];
+    const particleCount = 300;
+
+    for (let i = 0; i < particleCount; i++) {
+      particles.push({
+        x: width / 2,
+        y: height / 2,
+        vx: (Math.random() - 0.5) * 40,
+        vy: (Math.random() - 0.5) * 40 - 10,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        size: Math.random() * 14 + 7,
+        angle: Math.random() * Math.PI * 2,
+      });
+    }
+
+    let opacity = 1;
+    const animate = () => {
+      ctx.clearRect(0, 0, width, height);
+      opacity -= 0.008;
+      if (opacity <= 0) {
+        canvas.remove();
+        return;
+      }
+      particles.forEach((p) => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.25;
+        p.angle += 0.1;
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.angle);
+        ctx.globalAlpha = opacity;
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+        ctx.restore();
+      });
+      requestAnimationFrame(animate);
+    };
+    animate();
+  }, [visible]);
+
+  return null;
+}
+
 export default function CheckoutPage() {
+  const router = useRouter();
   const planFromUrl =
     typeof window !== "undefined"
       ? new URLSearchParams(window.location.search).get("plan")
@@ -75,26 +142,29 @@ export default function CheckoutPage() {
   if (status === "success") {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-amigo-bg text-amigo-text">
+        <Confetti visible />
         <motion.div
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          className="text-center py-20"
+          className="text-center py-20 z-10"
         >
           <div className="w-24 h-24 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-[0_0_30px_rgba(34,197,94,0.6)]">
             <PawPrint className="w-12 h-12 text-white" />
           </div>
           <h1 className="font-amigo font-bold text-4xl mb-4 text-amigo-text">
-            Payment successful!
+            Order placed successfully!
           </h1>
-          <p className="text-lg text-amigo-text-muted mb-8">
+          <p className="text-lg text-amigo-text-muted mb-10">
             Thank you for bringing Amigo home to your pet.
           </p>
-          <Link
-            href="/"
-            className="font-amigo font-bold text-amigo-primary underline"
+          <Button
+            variant="play"
+            size="lg"
+            className="w-auto"
+            onClick={() => router.push("/")}
           >
-            Back to home
-          </Link>
+            OK
+          </Button>
         </motion.div>
       </div>
     );
@@ -137,7 +207,7 @@ export default function CheckoutPage() {
                 className="absolute -top-4 -right-4 flex items-center gap-2 bg-white border border-teal-200 rounded-full px-4 py-2 shadow-amigo-glow animate-pulse"
               >
                 <PawPrint className="w-4 h-4 text-teal-400 fill-teal-400" />
-                <span className="text-xs font-bold text-amigo-text">Adopt me</span>
+                <span className="text-xs font-bold text-amigo-text">YAYY!!</span>
               </motion.div>
             </div>
           </div>
