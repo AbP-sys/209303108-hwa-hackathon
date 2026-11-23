@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, Heart, PawPrint } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { AmigoSVG } from "@/components/AmigoSVG";
 
@@ -86,6 +87,7 @@ function Confetti({ visible }: { visible: boolean }) {
 }
 
 export default function CheckoutPage() {
+  usePathname();
   const urlPlan =
     typeof window !== "undefined"
       ? new URLSearchParams(window.location.search).get("plan")

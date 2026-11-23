@@ -73,7 +73,7 @@ export default function Home() {
             className="text-center mb-4"
           >
             <h2 className="font-amigo font-bold text-3xl md:text-5xl mb-2 text-amigo-text">Built for connection</h2>
-            <p className="text-amigo-text-muted max-w-2xl mx-auto text-lg">Every detail is designed to help you and your pet feel at home.</p>
+            <p className="text-amigo-text-muted max-w-2xl mx-auto text-lg">Keeps your pet bustling and joyful throughout the day.</p>
           </motion.div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -116,7 +116,7 @@ export default function Home() {
                 viewport={{ once: true }}
                 className="mb-4"
               >
-                <h2 className="font-amigo font-bold text-3xl md:text-4xl mb-3 text-amigo-text">Moments that wag</h2>
+                <h2 className="font-amigo font-bold text-3xl md:text-4xl mb-3 text-amigo-text">Moments that wag 🐕</h2>
               </motion.div>
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
