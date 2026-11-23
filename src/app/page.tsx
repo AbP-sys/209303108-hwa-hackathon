@@ -1,69 +1,422 @@
-import Image from "next/image";
+"use client";
+
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { AmigoMascot } from "@/components/AmigoMascot";
+import { Heart, PawPrint, ShieldCheck, Sparkles, Zap, Home as HomeIcon, Gift, ArrowRight } from "lucide-react";
+import Link from "next/link";
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+} as const;
+
+const featureList = [
+  {
+    icon: Sparkles,
+    title: "Instant connection",
+    desc: "Amigo lights up the moment your pet arrives home — warm, expressive, and always happy to see you.",
+  },
+  {
+    icon: PawPrint,
+    title: "Playful by design",
+    desc: "Every interaction is rounded, bouncy, and joyful — built to spark a smile at first tap.",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Premium quality",
+    desc: "Soft-touch materials, rounded shapes, and a finish that feels as good as it looks.",
+  },
+  {
+    icon: Zap,
+    title: "Smooth transitions",
+    desc: "Micro-interactions and fluid animations make every tap feel alive.",
+  },
+];
+
+const plans = [
+  {
+    name: "Amigo Starter",
+    price: "$49",
+    desc: "Perfect first companion for a new pet.",
+    features: ["Playful mascot", "Warm onboarding", "Soft-touch finish"],
+    popular: false,
+  },
+  {
+    name: "Amigo Buddy",
+    price: "$79",
+    desc: "The full companion experience.",
+    features: ["Everything in Starter", "Animated expressions", "Premium gift box"],
+    popular: true,
+  },
+  {
+    name: "Amigo Pal",
+    price: "$119",
+    desc: "For devoted pet families.",
+    features: ["Everything in Buddy", "Extra accessories", "Priority support"],
+    popular: false,
+  },
+];
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="relative min-h-screen flex flex-col overflow-x-hidden bg-amigo-bg text-amigo-text selection:bg-amigo-primary/30">
+      <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4">
+        <motion.div
+          initial={{ y: -20 }}
+          animate={{ y: 0 }}
+          transition={{ type: "spring", stiffness: 300, damping: 30 }}
+          className="max-w-7xl mx-auto flex items-center justify-between"
+        >
+          <Link href="/" className="flex items-center gap-2 group">
+            <div className="w-8 h-8 bg-amigo-primary rounded-2xl shadow-amigo-glow flex items-center justify-center group-hover:rotate-12 transition-transform duration-300">
+              <Heart className="w-5 h-5 text-white" />
+            </div>
+            <span className={[
+              "font-amigo font-bold text-xl tracking-tight text-amigo-text",
+              "group-hover:text-amigo-primary transition-colors",
+            ].join(" ")}>Amigo</span>
+          </Link>
+          <div className="hidden md:flex items-center gap-6">
+            <Link href="#features" className="text-sm font-medium text-amigo-text-muted hover:text-amigo-primary transition-colors">Features</Link>
+            <Link href="#how-it-works" className="text-sm font-medium text-amigo-text-muted hover:text-amigo-primary transition-colors">How it works</Link>
+            <Link href="#plans" className="text-sm font-medium text-amigo-text-muted hover:text-amigo-primary transition-colors">Plans</Link>
+          </div>
+          <div className="flex items-center gap-3">
+            <Button variant="ghost" size="sm" className="text-amigo-text-muted hover:text-amigo-text border-amigo-border/50">
+              <HomeIcon className="w-4 h-4 mr-1" />
+              <span className="text-[10px] uppercase tracking-wider font-semibold">Home</span>
+            </Button>
+            <Button variant="play" size="lg" onClick={() => document.getElementById("order")?.scrollIntoView({ behavior: "smooth" })}>
+              Get Amigo
+            </Button>
+          </div>
+        </motion.div>
+      </nav>
+
+      {/* Marquee (MagicUI-style) */}
+      <div className="relative h-10 overflow-hidden border-y border-amigo-border bg-amigo-surface/40 backdrop-blur-sm">
+        <div className="flex items-center gap-8 whitespace-nowrap animate-[marquee_20s_linear_infinite]">
+          <span className="text-amigo-text-muted text-sm font-semibold">{"\u2661"} Amigo — your pet companion {"\u2661"}</span>
+          <span className="text-amigo-primary font-bold">Woof · Wag · Play · Cuddle · Repeat ·</span>
+          <span className="text-amigo-text-muted text-sm font-semibold">{"\u2661"} Amigo — your pet companion {"\u2661"}</span>
+          <span className="text-amigo-primary font-bold">Woof · Wag · Play · Cuddle · Repeat ·</span>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+      </div>
+
+      <main className="flex-1 relative pt-24 pb-20">
+        {/* Hero */}
+        <section className="relative px-6 max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, x: -40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="grid lg:grid-cols-2 gap-12 items-center"
           >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            <div className="flex flex-col justify-center lg:pl-8">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amigo-primary/10 border border-amigo-border text-amigo-primary text-xs font-bold mb-6">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amigo-primary opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-amigo-primary"></span>
+                </span>
+                New: Premium soft-touch edition
+              </div>
+              <h1 className="font-amigo font-bold text-5xl md:text-7xl leading-tight tracking-tight mb-6 text-amigo-text">
+                Meet <span className="text-transparent bg-clip-text bg-gradient-to-r from-amigo-primary via-amigo-secondary to-amigo-accent">Amigo.</span>
+              </h1>
+              <p className="text-lg md:text-xl text-amigo-text-muted mb-10 max-w-md leading-relaxed font-body">
+                Your pet’s new best friend. A warm, playful companion built with rounded shapes, smooth
+                transitions, and instant charm — for an instant connection.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Button variant="play" size="lg" onClick={() => document.getElementById("order")?.scrollIntoView({ behavior: "smooth" })}>
+                  Get Amigo <ArrowRight className="w-5 h-5 ml-1" />
+                </Button>
+                <Button variant="outline" size="lg" className="border-amigo-border text-amigo-text hover:bg-amigo-bg hover:text-amigo-primary">
+                  See how it works
+                </Button>
+              </div>
+            </div>
+
+            <div className="relative flex justify-center">
+              <div className="relative w-full max-w-xs lg:max-w-sm">
+                <AmigoMascot className="relative z-10" />
+                {/* Floating badge */}
+                <motion.div
+                  animate={{ y: [0, -12, 0] }}
+                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                  className="absolute -top-4 -right-4 flex items-center gap-2 bg-white border border-amigo-border rounded-full px-4 py-2 shadow-amigo-glow animate-pulse"
+                >
+                  <PawPrint className="w-4 h-4 text-amigo-primary fill-amigo-primary" />
+                  <span className="text-xs font-bold text-amigo-text">Adopt me</span>
+                </motion.div>
+              </div>
+            </div>
+          </motion.div>
+        </section>
+
+        {/* Features */}
+        <section id="features" className="px-6 max-w-7xl mx-auto py-24 relative">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
           >
-            Documentation
-          </a>
-        </div>
+            <h2 className="font-amigo font-bold text-3xl md:text-5xl mb-4 text-amigo-text">Built for connection</h2>
+            <p className="text-amigo-text-muted max-w-2xl mx-auto text-lg">Every detail is rounded, warm, and expressive — designed to make you and your pet feel at home.</p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {featureList.map((f) => (
+              <motion.div
+                key={f.title}
+                variants={itemVariants}
+                whileInView={{ ...itemVariants.visible }}
+                viewport={{ once: true }}
+                className={[
+                  "group relative p-6 rounded-3xl bg-amigo-surface border border-amigo-border shadow-sm",
+                  "hover:border-amigo-primary/50 hover:shadow-amigo-glow transition-all duration-300",
+                ].join(" ")}
+              >
+                <div className="w-12 h-12 rounded-2xl bg-amigo-primary/10 border border-amigo-border flex items-center justify-center mb-4 group-hover:bg-amigo-primary group-hover:text-white transition-colors duration-300">
+                  <f.icon className="w-6 h-6 text-amigo-primary group-hover:text-white" />
+                </div>
+                <h3 className="font-amigo font-bold text-lg mb-2 text-amigo-text">{f.title}</h3>
+                <p className="text-sm text-amigo-text-muted leading-relaxed">{f.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+
+        {/* Magic moments / how it works */}
+        <section id="how-it-works" className="px-6 max-w-7xl mx-auto py-24 bg-amigo-surface rounded-[3rem] my-16 border border-amigo-border overflow-hidden">
+          <div className="grid lg:grid-cols-2 gap-16 items-center p-8">
+            <div>
+              <h2 className="font-amigo font-bold text-3xl md:text-4xl mb-6 text-amigo-text">Moments that wag</h2>
+              <p className="text-amigo-text-muted mb-8 text-lg leading-relaxed">
+                From the first unboxing to every playful nudge, Amigo responds with smooth motion, warm light,
+                and a personality that grows on you.
+              </p>
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <Zap className="w-5 h-5 text-amigo-secondary" />
+                  <span className="font-medium text-amigo-text">Bouncy, expressive animations</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <ShieldCheck className="w-5 h-5 text-amigo-accent" />
+                  <span className="font-medium text-amigo-text">Premium soft-touch materials</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Gift className="w-5 h-5 text-amigo-primary" />
+                  <span className="font-medium text-amigo-text">Arrives in a playful gift box</span>
+                </div>
+              </div>
+            </div>
+            <div className="relative flex justify-center">
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                className="w-64 h-64 bg-orange-100 rounded-full shadow-amigo-glow border-4 border-orange-300 relative flex items-center justify-center overflow-hidden"
+              >
+                <AmigoMascot className="scale-110" />
+              </motion.div>
+            </div>
+          </div>
+        </section>
+
+        {/* Plans */}
+        <section id="plans" className="px-6 max-w-7xl mx-auto py-24 relative">
+          <div className="text-center mb-16">
+            <h2 className="font-amigo font-bold text-3xl md:text-5xl mb-4 text-amigo-text">Choose your companion</h2>
+            <p className="text-amigo-text-muted max-w-2xl mx-auto text-lg">Warm, premium, and ready to ship.</p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-6">
+            {plans.map((plan) => (
+              <Card key={plan.name} className={[
+                "flex flex-col group relative",
+                plan.popular ? "border-amigo-primary shadow-amigo-glow" : "",
+              ].join(" ")}>
+                <CardHeader className="pt-8">
+                  {plan.popular && (
+                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 flex items-center gap-1 bg-amigo-primary text-white px-3 py-1 rounded-full text-xs font-bold shadow-amigo-secondary-glow">
+                      <span className="w-2 h-2 bg-white rounded-full animate-pulse" />
+                      Most popular
+                    </div>
+                  )}
+                  <CardTitle className="mb-1">{plan.name}</CardTitle>
+                  <CardDescription>{plan.desc}</CardDescription>
+                </CardHeader>
+                <CardContent className="flex-1 flex flex-col">
+                  <div className="mb-6 text-4xl font-amigo font-bold text-amigo-text">{plan.price}</div>
+                  <ul className="space-y-3 text-sm text-amigo-text-muted flex-1">
+                    {plan.features.map((f) => (
+                      <li key={f} className="flex items-center gap-2">
+                        <PawPrint className="w-4 h-4 text-amigo-primary/40 shrink-0" />
+                        {f}
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+                <CardFooter>
+                  <Button
+                    variant={plan.popular ? "play" : "outline"}
+                    className="w-full"
+                    onClick={() => document.getElementById("order")?.scrollIntoView({ behavior: "smooth" })}
+                  >
+                    Choose {plan.name}
+                  </Button>
+                </CardFooter>
+              </Card>
+            ))}
+          </div>
+        </section>
       </main>
+
+      {/* Order section */}
+      <section id="order" className="px-6 max-w-7xl mx-auto py-20">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className={[
+            "rounded-[3rem] bg-gradient-to-br from-amigo-primary via-amigo-secondary to-amigo-accent p-8 md:p-12 relative overflow-hidden text-white",
+            "shadow-[0_0_40px_rgba(236,72,153,0.5)]",
+          ].join(" ")}
+        >
+          <div className="absolute top-0 left-0 w-full h-full opacity-[0.15] pointer-events-none">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-white rounded-full blur-[100px]" />
+          </div>
+          <div className="relative z-10 max-w-2xl mx-auto">
+            <div className="flex items-center justify-between mb-8">
+              <div>
+                <h2 className="font-amigo font-bold text-3xl mb-2">Ready to meet Amigo?</h2>
+                <p className="text-amigo-primary/20 text-lg">Place your order in under a minute.</p>
+              </div>
+              <div className="flex items-center gap-2 bg-white/10 px-3 py-1 rounded-full backdrop-blur-sm border border-white/20">
+                <Heart className="w-4 h-4 text-amigo-primary animate-pulse" />
+                <span className="text-xs font-bold tracking-wider">Free shipping</span>
+              </div>
+            </div>
+
+            <OrderForm />
+          </div>
+        </motion.div>
+      </section>
+
+      <footer className="border-y border-amigo-border bg-amigo-surface py-10">
+        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="flex items-center gap-2 font-amigo font-bold text-xl text-amigo-text">
+            <Heart className="w-5 h-5 text-amigo-primary" />
+            <span>Amigo</span>
+          </div>
+          <p className="text-xs text-amigo-text-muted">Premium pet companion. Designed with {"\u2661"}.</p>
+        </div>
+      </footer>
     </div>
+  );
+}
+
+function OrderForm() {
+  const [submitting, setSubmitting] = useState(false);
+  const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitting(true);
+    try {
+      const formData = new FormData(e.currentTarget as HTMLFormElement);
+      const res = await fetch("/api/order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formData.get("name"),
+          petName: formData.get("petName"),
+          plan: formData.get("plan"),
+          email: formData.get("email"),
+        }),
+      });
+      if (res.ok) {
+        setStatus("success");
+        (e.currentTarget as HTMLFormElement).reset();
+      } else {
+        setStatus("error");
+      }
+    } catch {
+      setStatus("error");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  if (status === "success") {
+    return (
+      <div className="text-center py-8 animate-bounce">
+        <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-amigo-glow">
+          <PawPrint className="w-8 h-8 text-white" />
+        </div>
+        <h3 className="font-amigo font-bold text-xl mb-2">Woof! Order placed 🐾</h3>
+        <p className="text-amigo-primary/20">Amigo is on the way to your pet.</p>
+      </div>
+    );
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4 max-w-lg mx-auto">
+      <div className="grid sm:grid-cols-2 gap-4">
+        <div>
+          <label className="block text-xs font-bold text-white/80 mb-1">Your name</label>
+          <input
+            name="name"
+            required
+            className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:ring-2 focus:ring-amigo-primary outline-none transition-all"
+            placeholder="Alex"
+          />
+        </div>
+        <div>
+          <label className="block text-xs font-bold text-white/80 mb-1">Pet{"\u2019"}s name</label>
+          <input
+            name="petName"
+            required
+            className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:ring-2 focus:ring-amigo-primary outline-none transition-all"
+            placeholder="Buddy"
+          />
+        </div>
+      </div>
+      <div>
+        <label className="block text-xs font-bold text-white/80 mb-1">Email</label>
+        <input
+          name="email"
+          type="email"
+          required
+          className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:ring-2 focus:ring-amigo-primary outline-none transition-all"
+          placeholder="alex@example.com"
+        />
+      </div>
+      <div>
+        <label className="block text-xs font-bold text-white/80 mb-1">Choose your Amigo</label>
+        <select
+          name="plan"
+          className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white focus:ring-2 focus:ring-amigo-primary outline-none transition-all"
+        >
+          <option value="starter">Amigo Starter — $49</option>
+          <option value="buddy">Amigo Buddy — $79</option>
+          <option value="pal">Amigo Pal — $119</option>
+        </select>
+      </div>
+      <Button type="submit" variant="play" size="lg" className="w-full" disabled={submitting}>
+        {submitting ? "Placing order…" : "Get Amigo"}
+      </Button>
+    </form>
   );
 }
