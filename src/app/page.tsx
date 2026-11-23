@@ -65,7 +65,7 @@ export default function Home() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="px-6 max-w-7xl mx-auto relative"
+          className="px-6 py-16 max-w-7xl mx-auto relative"
         >
           <motion.div
             initial={{ opacity: 0, y: 20 }}
