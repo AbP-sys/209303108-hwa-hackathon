@@ -234,16 +234,16 @@ export default function Home() {
                 viewport={{ once: true }}
                 whileHover={{ y: -6 }}
                 className={[
-                  "group relative rounded-[3rem] p-8 border shadow-sm transition-all duration-300 flex flex-col",
-                  "border-amigo-border text-amigo-text bg-amigo-surface",
+                  "group relative rounded-[3rem] p-8 border shadow-amigo-glow transition-all duration-300 flex flex-col",
+                  "border-amigo-primary/30 text-amigo-text bg-amigo-surface",
                   plan.popular
-                    ? "border-amigo-primary shadow-amigo-glow ring-2 ring-amigo-primary/20"
-                    : "",
+                    ? "border-amigo-primary shadow-[0_0_40px_rgba(34,211,238,0.5)] ring-2 ring-amigo-primary/40"
+                    : "border-amigo-primary/50 shadow-amigo-glow",
                 ].join(" ")}
               >
-                <CardHeader className="pt-8 flex-1 pt-12">
+                <CardHeader className="pt-16 flex-1">
                   {plan.popular && (
-                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 flex items-center gap-1 bg-amigo-surface text-amigo-primary px-3 py-1 rounded-full text-xs font-bold shadow-sm border border-amigo-primary/50">
+                    <div className="absolute -top-8 left-1/2 -translate-x-1/2 flex items-center gap-1 bg-amigo-surface text-amigo-primary px-3 py-1 rounded-full text-xs font-bold shadow-sm border border-amigo-primary/40">
                       <span className="w-2 h-2 bg-amigo-primary rounded-full animate-pulse" />
                       Best value
                     </div>
@@ -263,7 +263,7 @@ export default function Home() {
                 </CardContent>
                 <CardFooter>
                   <Button
-                    variant={plan.popular ? "outline" : "play"}
+                    variant={plan.popular ? "play" : "outline"}
                     className="w-full"
                     onClick={() => document.getElementById("order")?.scrollIntoView({ behavior: "smooth" })}
                   >
