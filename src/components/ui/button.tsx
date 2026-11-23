@@ -20,7 +20,7 @@ const buttonVariants = cva(
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
         play:
-          "bg-gradient-to-br from-orange-400 via-pink-500 to-orange-400 text-white shadow-amigo-secondary-glow hover:from-orange-300 hover:via-pink-400 hover:to-orange-300 hover:shadow-[0_0_32px_rgba(236,72,153,0.6)] active:scale-95",
+          "bg-gradient-to-br from-teal-400 via-cyan-400 to-teal-400 text-white shadow-amigo-secondary-glow hover:from-teal-300 hover:via-cyan-300 hover:to-teal-300 hover:shadow-[0_0_32px_rgba(34,211,238,0.6)] active:scale-95",
       },
       size: {
         default: "h-10 px-4 py-2",

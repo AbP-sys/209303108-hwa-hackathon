@@ -70,7 +70,7 @@ const plans = [
 export default function Home() {
   return (
     <div className="relative min-h-screen flex flex-col overflow-x-hidden bg-amigo-bg text-amigo-text selection:bg-amigo-primary/30">
-      <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4">
+      <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-3 border-b border-amigo-border bg-amigo-surface/95 backdrop-blur-md shadow-sm">
         <motion.div
           initial={{ y: -20 }}
           animate={{ y: 0 }}
@@ -102,16 +102,6 @@ export default function Home() {
           </div>
         </motion.div>
       </nav>
-
-      {/* Marquee (MagicUI-style) */}
-      <div className="relative h-10 overflow-hidden border-y border-amigo-border bg-amigo-surface/40 backdrop-blur-sm">
-        <div className="flex items-center gap-8 whitespace-nowrap animate-[marquee_20s_linear_infinite]">
-          <span className="text-amigo-text-muted text-sm font-semibold">{"\u2661"} Amigo — your pet companion {"\u2661"}</span>
-          <span className="text-amigo-primary font-bold">Woof · Wag · Play · Cuddle · Repeat ·</span>
-          <span className="text-amigo-text-muted text-sm font-semibold">{"\u2661"} Amigo — your pet companion {"\u2661"}</span>
-          <span className="text-amigo-primary font-bold">Woof · Wag · Play · Cuddle · Repeat ·</span>
-        </div>
-      </div>
 
       <main className="flex-1 relative pt-24 pb-20">
         {/* Hero */}
@@ -227,7 +217,7 @@ export default function Home() {
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                className="w-64 h-64 bg-orange-100 rounded-full shadow-amigo-glow border-4 border-orange-300 relative flex items-center justify-center overflow-hidden"
+                className="w-64 h-64 bg-teal-100 rounded-full shadow-amigo-glow border-4 border-teal-200 relative flex items-center justify-center overflow-hidden"
               >
                 <AmigoMascot className="scale-110" />
               </motion.div>

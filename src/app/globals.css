@@ -1,16 +1,16 @@
 @import "tailwindcss";
 
 @theme {
-  --color-amigo-bg: #fff7ed;
+  --color-amigo-bg: #f0fdfa;
   --color-amigo-surface: #ffffff;
-  --color-amigo-primary: #f97316;
-  --color-amigo-primary-glow: rgba(249, 115, 22, 0.35);
-  --color-amigo-secondary: #ec4899;
-  --color-amigo-secondary-glow: rgba(236, 72, 153, 0.45);
-  --color-amigo-accent: #22d3ee;
-  --color-amigo-text: #451a03;
-  --color-amigo-text-muted: #7c2d12;
-  --color-amigo-border: #fdba74;
+  --color-amigo-primary: #22d3ee;
+  --color-amigo-primary-glow: rgba(34, 211, 238, 0.35);
+  --color-amigo-secondary: #f4a7b9;
+  --color-amigo-secondary-glow: rgba(244, 167, 185, 0.45);
+  --color-amigo-accent: #86efac;
+  --color-amigo-text: #0f172a;
+  --color-amigo-text-muted: #475569;
+  --color-amigo-border: #bae6fd;
 
   --font-amigo: "Fredoka", ui-sans-serif, system-ui, sans-serif;
   --font-body: "Nunito", ui-sans-serif, system-ui, sans-serif;

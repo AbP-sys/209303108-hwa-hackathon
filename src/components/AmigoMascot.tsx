@@ -1,32 +1,23 @@
 "use client";
 
-import { motion, useMotionValue, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
 export function AmigoMascot({ className = "" }: { className?: string }) {
   const [blinking, setBlinking] = useState(false);
+  const [antennaPulse, setAntennaPulse] = useState(false);
 
   useEffect(() => {
-    const id = setInterval(() => {
+    const blinkId = setInterval(() => {
       setBlinking(true);
-      setTimeout(() => setBlinking(false), 120);
-    }, 3200);
-    return () => clearInterval(id);
-  }, []);
-
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  const headRotate = useTransform(mouseX, [-200, 200], [-8, 8]);
-  const headTilt = useTransform(mouseY, [-200, 200], [-4, 4]);
-
-  useEffect(() => {
-    const handle = (e: MouseEvent) => {
-      mouseX.set(e.clientX - window.innerWidth / 2);
-      mouseY.set(e.clientY - window.innerHeight / 2);
+      setTimeout(() => setBlinking(false), 150);
+    }, 4000);
+    const pulseId = setInterval(() => setAntennaPulse((p) => !p), 2200);
+    return () => {
+      clearInterval(blinkId);
+      clearInterval(pulseId);
     };
-    window.addEventListener("mousemove", handle);
-    return () => window.removeEventListener("mousemove", handle);
-  }, [mouseX, mouseY]);
+  }, []);
 
   return (
     <div
@@ -34,71 +25,116 @@ export function AmigoMascot({ className = "" }: { className?: string }) {
         "relative inline-block group cursor-pointer",
         className,
       ].join(" ")}
-      style={{ transformOrigin: "center" }}
+      style={{ transformOrigin: "center bottom" }}
     >
-      {/* Tail */}
+      {/* Floating body animation */}
       <motion.div
-        animate={{ rotate: [0, 18, 0, -18, 0] }}
-        transition={{ duration: 1.2, repeat: Infinity, ease: "linear" }}
-        className="absolute -right-3 bottom-10 w-12 h-20 bg-orange-200 rounded-full opacity-80 origin-top rotate-45 -z-10 group-hover:scale-110"
-      />
-
-      {/* Body */}
-      <motion.div
-        animate={{ scale: [1, 1.04, 1], y: [0, -6, 0] }}
-        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-        className="relative z-10 w-48 h-48 bg-orange-200 rounded-full shadow-amigo-glow border-4 border-orange-300 overflow-hidden group-hover:scale-105"
+        animate={{ y: [0, -8, 0] }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        className="relative z-10"
       >
-        <div className="absolute bottom-10 left-8 w-20 h-14 bg-orange-100 rounded-full opacity-90" />
-        <div className="absolute top-12 left-16 w-6 h-10 bg-white rounded-full opacity-60 blur-sm" />
-      </motion.div>
-
-      {/* Head */}
-      <motion.div
-        style={{ rotate: headRotate, y: headTilt }}
-        className="absolute -top-14 left-1/2 -translate-x-1/2 z-20 w-32 h-32 bg-amigo-primary rounded-full shadow-amigo-secondary-glow border-4 border-orange-300"
-      >
-        <div className="absolute -top-6 -left-4 w-14 h-20 bg-amigo-primary rounded-full rotate-[-20deg] origin-bottom border-4 border-orange-300 border-t-transparent border-l-transparent shadow-amigo-secondary-glow" />
-        <div className="absolute -top-6 -right-4 w-14 h-20 bg-amigo-primary rounded-full rotate-[20deg] origin-bottom border-4 border-orange-300 border-t-transparent border-r-transparent shadow-amigo-secondary-glow" />
-
-        <div className="flex items-center justify-center gap-3 pt-6">
-          <motion.div
-            animate={blinking ? { scaleY: 0 } : { scaleY: 1 }}
-            transition={{ duration: 0.15 }}
-            className="w-5 h-5 bg-white rounded-full border-2 border-amigo-text relative shadow-inner"
-          >
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-amigo-text rounded-full" />
-          </motion.div>
-          <motion.div
-            animate={blinking ? { scaleY: 0 } : { scaleY: 1 }}
-            transition={{ duration: 0.15 }}
-            className="w-5 h-5 bg-white rounded-full border-2 border-amigo-text relative shadow-inner"
-          >
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-amigo-text rounded-full" />
-          </motion.div>
+        {/* Rear wheel (left) */}
+        <div className="absolute -left-3 bottom-0 w-12 h-14 bg-slate-400 rounded-full shadow-lg z-0">
+          <div className="absolute inset-0 w-6 h-6 bg-teal-200 rounded-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 border-2 border-white" />
         </div>
 
-        <div className="absolute top-16 left-1/2 -translate-x-1/2 w-5 h-4 bg-amigo-text rounded-full opacity-90" />
-        <div className="absolute top-21 left-1/2 -translate-x-1/2">
-          <svg className="w-6 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: "#fff" }}>
-            <path d="M0 0 Q2 4 4 0" />
-          </svg>
-        </div>
-        <div className="absolute top-14 left-1 w-4 h-4 bg-pink-400 rounded-full opacity-60 blur-md" />
-        <div className="absolute top-14 right-1 w-4 h-4 bg-pink-400 rounded-full opacity-60 blur-md" />
-      </motion.div>
+        {/* Body */}
+        <motion.div
+          animate={{ scale: [1, 1.02, 1] }}
+          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+          className="relative w-72 h-48 bg-white rounded-[40%]_rounded-[60%] rounded-[35%]_rounded-[65%] border-4 border-teal-100 shadow-[0_0_40px_rgba(156,216,212,0.35)] overflow-hidden"
+        >
+          {/* Chest highlight stripe */}
+          <div
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1/3 h-1 bg-teal-300/70 rounded-full shadow-[0_0_12px_rgba(93,228,255,0.8)]"
+          />
+          {/* Paw print */}
+          <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-10 h-10 text-teal-300">
+            <svg
+              className="w-full h-full text-teal-300"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="3"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M2 6 Q1 4 3 2 M5 6 Q6 4 8 2" />
+              <circle cx="5" cy="5" r="1.5" />
+            </svg>
+          </div>
 
-      {/* Paws */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 flex gap-2">
-        <div className="w-6 h-3 bg-orange-300 rounded-full" />
-        <div className="w-6 h-3 bg-orange-300 rounded-full" />
-      </div>
+          {/* Neck separation line */}
+          <div className="absolute top-8 left-0 right-0 h-1 bg-teal-100/60" />
+        </motion.div>
+
+        {/* Head */}
+        <motion.div
+          animate={{ scale: [1, 1.01, 1], rotate: [0, 1, 0] }}
+          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute -top-14 left-1/2 -translate-x-1/2 w-48 h-36 bg-white rounded-[45%] border-4 border-teal-100 shadow-[0_0_30px_rgba(156,216,212,0.4)] relative z-20 overflow-hidden"
+        >
+          {/* Screen face */}
+          <div
+            className="absolute top-4 left-4 right-4 bottom-6 bg-[#0b0c10] rounded-[35%] border-2 border-teal-200/60 relative overflow-hidden shadow-inner"
+          >
+            {/* Left eye (glowing curved) */}
+            <motion.div
+              animate={blinking ? { scaleY: 0.05 } : { scaleY: 1 }}
+              transition={{ duration: 0.15 }}
+              className="absolute top-12 left-8 w-14 h-6 bg-transparent border-t-8 border-teal-400 rounded-full opacity-90 shadow-[0_0_16px_rgba(93,228,255,0.9)]"
+            />
+            {/* Right eye */}
+            <motion.div
+              animate={blinking ? { scaleY: 0.05 } : { scaleY: 1 }}
+              transition={{ duration: 0.15 }}
+              className="absolute top-12 right-8 w-14 h-6 bg-transparent border-t-8 border-teal-400 rounded-full opacity-90 shadow-[0_0_16px_rgba(93,228,255,0.9)] transform -scale-x-1"
+            />
+            {/* Left blush */}
+            <div className="absolute top-20 left-6 w-3 h-1.5 bg-pink-400/70 rounded-full blur-sm" />
+            {/* Right blush */}
+            <div className="absolute top-20 right-6 w-3 h-1.5 bg-pink-400/70 rounded-full blur-sm" />
+            {/* Nose / mouth */}
+            <div
+              className="absolute top-22 left-1/2 -translate-x-1/2 w-6 h-2 bg-teal-400 rounded-full shadow-[0_0_10px_rgba(93,228,255,0.8)]"
+            />
+          </div>
+
+          {/* Left ear/side accent */}
+          <div
+            className="absolute -top-2 -left-4 w-10 h-16 bg-teal-200 rounded-full border-2 border-teal-300 border-t-transparent border-l-transparent rotate-[-15deg] origin-top shadow-[0_0_12px_rgba(156,216,212,0.4)]"
+          />
+          {/* Right ear/side accent */}
+          <div
+            className="absolute -top-2 -right-4 w-10 h-16 bg-teal-200 rounded-full border-2 border-teal-300 border-t-transparent border-r-transparent rotate-[15deg] origin-top shadow-[0_0_12px_rgba(156,216,212,0.4)]"
+          />
+        </motion.div>
+
+        {/* Antenna */}
+        <motion.div
+          animate={antennaPulse
+            ? { boxShadow: ["0 0 8px rgba(93,228,255,0.6)", "0 0 24px rgba(93,228,255,1)"] }
+            : { boxShadow: ["0 0 8px rgba(93,228,255,0.6)"] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute -top-6 right-6 w-1 h-12 bg-teal-200 rounded-full z-30 rotate-10"
+        >
+          <motion.div
+            animate={{ scale: [1, 1.15, 1], opacity: [0.9, 1, 0.9] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-0 left-1/2 -translate-x-1/2 w-5 h-5 bg-teal-100 rounded-full shadow-[0_0_20px_rgba(93,228,255,1)] border border-white"
+          />
+        </motion.div>
+
+        {/* Front wheel (right) */}
+        <div className="absolute right-3 bottom-0 w-12 h-14 bg-slate-400 rounded-full shadow-lg z-0">
+          <div className="absolute inset-0 w-6 h-6 bg-teal-200 rounded-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 border-2 border-white" />
+        </div>
+      </motion.div>
 
       {/* Love badge */}
       <motion.div
         animate={{ scale: [1, 1.15, 1], opacity: [0.7, 1, 0.7] }}
         transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-0 right-0 w-8 h-8 bg-pink-500 text-white rounded-full flex items-center justify-center text-[10px] font-bold shadow-amigo-secondary-glow animate-bounce"
+        className="absolute top-0 right-0 w-8 h-8 bg-teal-400 text-white rounded-full flex items-center justify-center text-[10px] font-bold shadow-[0_0_20px_rgba(93,228,255,0.6)] animate-bounce"
       >
         ♡
       </motion.div>
