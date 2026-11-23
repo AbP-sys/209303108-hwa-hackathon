@@ -22,7 +22,7 @@ export function SyntraHero({ className = "" }: { className?: string }) {
   return (
     <section
       className={[
-        "relative min-h-[90vh] flex flex-col overflow-hidden bg-amigo-bg",
+        "relative min-h-[70vh] flex flex-col overflow-hidden bg-amigo-bg",
         className,
       ].join(" ")}
     >
@@ -91,27 +91,24 @@ export function SyntraHero({ className = "" }: { className?: string }) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="flex flex-col lg:flex-row gap-12 items-center py-20"
+          className="flex flex-col lg:flex-row gap-10 items-center py-14"
         >
           {/* Text side */}
           <div className="flex-1 lg:flex-1">
             <h1 className="font-amigo font-bold text-5xl md:text-7xl leading-tight tracking-tight mb-6 text-amigo-text">
               Meet <span className="text-transparent bg-clip-text bg-gradient-to-r from-amigo-primary via-amigo-secondary to-amigo-accent">Amigo.</span>
             </h1>
-            <p className="text-lg md:text-xl text-amigo-text-muted mb-8 max-w-md leading-relaxed font-body">
+            <p className="text-lg md:text-xl text-amigo-text-muted mb-6 max-w-md leading-relaxed font-body">
               Your pet companion
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Button variant="play" size="lg" onClick={() => document.getElementById("order")?.scrollIntoView({ behavior: "smooth" })}>
                 Get Amigo <ArrowRight className="w-5 h-5 ml-1" />
               </Button>
-              <Button variant="outline" size="lg" className="border-amigo-border text-amigo-text hover:bg-amigo-bg hover:text-amigo-primary">
-                See how it works
-              </Button>
             </div>
 
             {/* Metrics */}
-            <div className="mt-12 flex flex-wrap gap-x-8 gap-y-4 items-start">
+            <div className="mt-8 flex flex-wrap gap-x-8 gap-y-4 items-start">
               {metrics.map((m) => (
                 <motion.div
                   key={m.label}
