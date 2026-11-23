@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import {
   CardContent,
   CardHeader,
@@ -51,6 +52,7 @@ const featureList = [
 
 export default function Home() {
   const router = useRouter();
+  const [cursor, setCursor] = useState({ x: 0, y: 0 });
 
   return (
     <div className="relative min-h-screen flex flex-col overflow-x-hidden bg-amigo-bg text-amigo-text selection:bg-amigo-primary/30">
@@ -126,8 +128,8 @@ export default function Home() {
                 className="mb-4"
               >
                 <p className="text-amigo-text-muted mb-4 text-sm leading-relaxed">
-                  From the first unboxing to every playful nudge, Amigo responds with movement, light,
-                  and a personality that grows on you.
+                  Engage your pet in fun activites and challenging side-quests throughout the day
+                  with an AI powered play mate.
                 </p>
               </motion.div>
               <div className="space-y-2">
@@ -232,8 +234,12 @@ export default function Home() {
                 whileInView={{ ...itemVariants.visible }}
                 viewport={{ once: true }}
                 whileHover={{ y: -6 }}
+                onMouseMove={(e) => {
+                  const rect = e.currentTarget.getBoundingClientRect();
+                  setCursor({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+                }}
                 className={[
-                  "group relative rounded-[3rem] p-8 border shadow-amigo-glow transition-all duration-300 flex flex-col",
+                  "group relative rounded-[3rem] p-8 border shadow-amigo-glow transition-all duration-300 flex flex-col overflow-hidden",
                   "border-amigo-primary text-amigo-text bg-amigo-surface",
                   plan.popular
                     ? "border-amigo-primary shadow-[0_0_60px_rgba(34,211,238,0.7)] ring-2 ring-amigo-primary/60"
@@ -242,6 +248,16 @@ export default function Home() {
                 onClick={() => router.push(`/checkout?plan=${plan.name === "Lifetime access" ? "lifetime" : "monthly"}`)}
                 style={{ cursor: "pointer" }}
               >
+                <div className="absolute inset-0 pointer-events-none">
+                  <div
+                    className="absolute w-full h-full rounded-[3rem] border-2 border-transparent"
+                    style={{
+                      backgroundImage:
+                        "linear-gradient(135deg, rgba(34, 211, 238, 0.15) 0%, transparent 50%), radial-gradient(circle at var(--cx) var(--cy), rgba(34, 211, 238, 0.12) 0%, transparent 40%)",
+                      transform: `translate(${cursor.x}px, ${cursor.y}px) scale(1.4)`,
+                    }}
+                  />
+                </div>
                 <CardHeader className="pt-16 flex-1">
                   {plan.popular && (
                     <div className="absolute -top-8 left-1/2 -translate-x-1/2 flex items-center gap-1 bg-amigo-surface text-amigo-primary px-3 py-1 rounded-full text-xs font-bold shadow-sm border border-amigo-primary/40">
@@ -251,7 +267,7 @@ export default function Home() {
                   )}
                   <CardTitle className="mb-1">{plan.name}</CardTitle>
                 </CardHeader>
-                <CardContent className="flex-1 flex flex-col">
+                <CardContent className="flex-1 flex flex-col relative z-10">
                   <div className="mb-6 text-5xl font-amigo font-bold">{plan.price}<span className="text-2xl">{plan.unit}</span></div>
                   <ul className="space-y-3 text-sm flex-1">
                     {plan.features.map((f) => (
