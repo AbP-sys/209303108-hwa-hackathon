@@ -15,28 +15,18 @@ import {
   PawPrint,
   ShieldCheck,
   Zap,
-  Home as HomeIcon,
   Gift,
-  ArrowRight,
   Clock,
   Target,
   Trophy,
   Smile,
 } from "lucide-react";
-import Link from "next/link";
 import { AmigoSVG } from "@/components/AmigoSVG";
+import { SyntraHero } from "@/components/SyntraHero";
 
 const itemVariants = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
-} as const;
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.12, delayChildren: 0.2 },
-  },
 } as const;
 
 const featureList = [
@@ -53,7 +43,7 @@ const featureList = [
   {
     icon: Trophy,
     title: "Interactive play",
-    desc: "Gentle movements, playful sounds and activity prompts encourage your dog to engage in short play sessions.",
+    desc: "Gentle movements and playful sounds encourage your dog to engage in short play sessions.",
   },
   {
     icon: Smile,
@@ -67,7 +57,7 @@ const plans = [
     name: "Amigo Starter",
     price: "$49",
     desc: "Perfect first companion for a new pet.",
-    features: ["Playful mascot", "Warm onboarding", "Soft-touch finish"],
+    features: ["Playful mascot", "Warm welcome", "Soft finish"],
     popular: false,
   },
   {
@@ -89,96 +79,9 @@ const plans = [
 export default function Home() {
   return (
     <div className="relative min-h-screen flex flex-col overflow-x-hidden bg-amigo-bg text-amigo-text selection:bg-amigo-primary/30">
-      <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-3 border-b border-amigo-border bg-amigo-surface/95 backdrop-blur-md shadow-sm">
-        <motion.div
-          initial={{ y: -20 }}
-          animate={{ y: 0 }}
-          transition={{ type: "spring", stiffness: 300, damping: 30 }}
-          className="max-w-7xl mx-auto flex items-center justify-between"
-        >
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-8 h-8 bg-amigo-primary rounded-2xl shadow-amigo-glow flex items-center justify-center group-hover:rotate-12 transition-transform duration-300">
-              <Heart className="w-5 h-5 text-white" />
-            </div>
-            <span className={[
-              "font-amigo font-bold text-xl tracking-tight text-amigo-text",
-              "group-hover:text-amigo-primary transition-colors",
-            ].join(" ")}>Amigo</span>
-          </Link>
-          <div className="hidden md:flex items-center gap-6">
-            <Link href="#features" className="text-sm font-medium text-amigo-text-muted hover:text-amigo-primary transition-colors">Features</Link>
-            <Link href="#how-it-works" className="text-sm font-medium text-amigo-text-muted hover:text-amigo-primary transition-colors">How it works</Link>
-            <Link href="#plans" className="text-sm font-medium text-amigo-text-muted hover:text-amigo-primary transition-colors">Plans</Link>
-          </div>
-          <div className="flex items-center gap-3">
-            <Button variant="ghost" size="sm" className="text-amigo-text-muted hover:text-amigo-text border-amigo-border/50">
-              <HomeIcon className="w-4 h-4 mr-1" />
-              <span className="text-[10px] uppercase tracking-wider font-semibold">Home</span>
-            </Button>
-            <Button variant="play" size="lg" onClick={() => document.getElementById("order")?.scrollIntoView({ behavior: "smooth" })}>
-              Get Amigo
-            </Button>
-          </div>
-        </motion.div>
-      </nav>
+      <SyntraHero />
 
       <main className="flex-1 relative pt-24 pb-20">
-        {/* Hero */}
-        <motion.section
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="relative px-6 max-w-7xl mx-auto"
-        >
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            className="grid lg:grid-cols-2 gap-12 items-center"
-          >
-            <div className="flex flex-col justify-center lg:pl-8">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amigo-primary/10 border border-amigo-border text-amigo-primary text-xs font-bold mb-6">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amigo-primary opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-amigo-primary"></span>
-                </span>
-                New: Premium soft-touch edition
-              </div>
-              <h1 className="font-amigo font-bold text-5xl md:text-7xl leading-tight tracking-tight mb-6 text-amigo-text">
-                Meet <span className="text-transparent bg-clip-text bg-gradient-to-r from-amigo-primary via-amigo-secondary to-amigo-accent">Amigo.</span>
-              </h1>
-              <p className="text-lg md:text-xl text-amigo-text-muted mb-10 max-w-md leading-relaxed font-body">
-                Your pet’s new best friend. A warm, playful companion built with rounded shapes, smooth
-                transitions, and instant charm — for an instant connection.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button variant="play" size="lg" onClick={() => document.getElementById("order")?.scrollIntoView({ behavior: "smooth" })}>
-                  Get Amigo <ArrowRight className="w-5 h-5 ml-1" />
-                </Button>
-                <Button variant="outline" size="lg" className="border-amigo-border text-amigo-text hover:bg-amigo-bg hover:text-amigo-primary">
-                  See how it works
-                </Button>
-              </div>
-            </div>
-
-            <div className="relative flex justify-center">
-              <div className="relative w-full max-w-xs lg:max-w-sm">
-                <AmigoSVG size="lg" />
-                {/* Floating badge */}
-                <motion.div
-                  animate={{ y: [0, -12, 0] }}
-                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                  className="absolute -top-4 -right-4 flex items-center gap-2 bg-white border border-teal-200 rounded-full px-4 py-2 shadow-amigo-glow animate-pulse"
-                >
-                  <PawPrint className="w-4 h-4 text-teal-400 fill-teal-400" />
-                  <span className="text-xs font-bold text-amigo-text">Adopt me</span>
-                </motion.div>
-              </div>
-            </div>
-          </motion.div>
-        </motion.section>
-
         {/* Features */}
         <motion.section
           id="features"
@@ -195,7 +98,7 @@ export default function Home() {
             className="text-center mb-16"
           >
             <h2 className="font-amigo font-bold text-3xl md:text-5xl mb-4 text-amigo-text">Built for connection</h2>
-            <p className="text-amigo-text-muted max-w-2xl mx-auto text-lg">Every detail is rounded, warm, and expressive — designed to make you and your pet feel at home.</p>
+            <p className="text-amigo-text-muted max-w-2xl mx-auto text-lg">Every detail is designed to help you and your pet feel at home.</p>
           </motion.div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -247,14 +150,14 @@ export default function Home() {
                 className="mb-8"
               >
                 <p className="text-amigo-text-muted mb-8 text-lg leading-relaxed">
-                  From the first unboxing to every playful nudge, Amigo responds with smooth motion, warm light,
+                  From the first unboxing to every playful nudge, Amigo responds with movement, light,
                   and a personality that grows on you.
                 </p>
               </motion.div>
               <div className="space-y-4">
                 {[
                   { icon: Zap, color: "text-amigo-secondary", text: "Bouncy, expressive animations" },
-                  { icon: ShieldCheck, color: "text-amigo-accent", text: "Premium soft-touch materials" },
+                  { icon: ShieldCheck, color: "text-amigo-accent", text: "Quality materials you can trust" },
                   { icon: Gift, color: "text-amigo-primary", text: "Arrives in a playful gift box" },
                 ].map((item, i) => (
                   <motion.div
@@ -293,7 +196,7 @@ export default function Home() {
             className="text-center mb-16"
           >
             <h2 className="font-amigo font-bold text-3xl md:text-5xl mb-4 text-amigo-text">Choose your companion</h2>
-            <p className="text-amigo-text-muted max-w-2xl mx-auto text-lg">Warm, premium, and ready to ship.</p>
+            <p className="text-amigo-text-muted max-w-2xl mx-auto text-lg">Ready to ship, built to bond.</p>
           </motion.div>
           <div className="grid md:grid-cols-3 gap-6">
             {plans.map((plan) => (
@@ -383,7 +286,7 @@ export default function Home() {
             <Heart className="w-5 h-5 text-amigo-primary" />
             <span>Amigo</span>
           </div>
-          <p className="text-xs text-amigo-text-muted">Premium pet companion. Designed with ♡.</p>
+          <p className="text-xs text-amigo-text-muted">Your pet companion. Designed with ♡.</p>
         </div>
       </footer>
     </div>
