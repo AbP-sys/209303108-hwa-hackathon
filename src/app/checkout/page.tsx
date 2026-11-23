@@ -4,8 +4,6 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, Heart, PawPrint } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { AmigoSVG } from "@/components/AmigoSVG";
 
@@ -88,9 +86,11 @@ function Confetti({ visible }: { visible: boolean }) {
 }
 
 export default function CheckoutPage() {
- const searchParams = useSearchParams();
- const planKey =
-  searchParams.get("plan") === "lifetime" ? "lifetime" : "monthly";
+  const urlPlan =
+    typeof window !== "undefined"
+      ? new URLSearchParams(window.location.search).get("plan")
+      : null;
+  const planKey = urlPlan === "lifetime" ? "lifetime" : "monthly";
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
 
