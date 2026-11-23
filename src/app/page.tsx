@@ -1,11 +1,9 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 import {
   CardContent,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -52,7 +50,8 @@ const featureList = [
 ];
 
 export default function Home() {
-  const [orderConfetti, setOrderConfetti] = useState({ visible: false, count: 0 });
+  const router = useRouter();
+
   return (
     <div className="relative min-h-screen flex flex-col overflow-x-hidden bg-amigo-bg text-amigo-text selection:bg-amigo-primary/30">
       <SyntraHero />
@@ -238,8 +237,10 @@ export default function Home() {
                   "border-amigo-primary text-amigo-text bg-amigo-surface",
                   plan.popular
                     ? "border-amigo-primary shadow-[0_0_60px_rgba(34,211,238,0.7)] ring-2 ring-amigo-primary/60"
-                    : "border-amigo-primary shadow-amigo-glow",
+                    : "border-amigo-primary shadow-amigo-glow ring-2 ring-amigo-primary/30",
                 ].join(" ")}
+                onClick={() => router.push(`/checkout?plan=${plan.name === "Lifetime access" ? "lifetime" : "monthly"}`)}
+                style={{ cursor: "pointer" }}
               >
                 <CardHeader className="pt-16 flex-1">
                   {plan.popular && (
@@ -261,56 +262,11 @@ export default function Home() {
                     ))}
                   </ul>
                 </CardContent>
-                <CardFooter>
-                  <Button
-                    variant={plan.popular ? "play" : "outline"}
-                    className="w-full"
-                    onClick={() => document.getElementById("order")?.scrollIntoView({ behavior: "smooth" })}
-                  >
-                    Choose {plan.name}
-                  </Button>
-                </CardFooter>
               </motion.div>
             ))}
           </div>
         </motion.section>
       </main>
-
-      {/* Order section */}
-      <motion.section
-        id="order"
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-        className="px-6 max-w-7xl mx-auto py-20"
-      >
-        <div className={[
-          "rounded-[3rem] bg-gradient-to-br from-amigo-primary via-amigo-secondary to-amigo-accent p-8 md:p-12 relative overflow-hidden text-white",
-          "shadow-[0_0_40px_rgba(236,72,153,0.5)]",
-        ].join(" ")}
-        >
-          <div className="absolute top-0 left-0 w-full h-full opacity-[0.15] pointer-events-none">
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-white rounded-full blur-[100px]" />
-          </div>
-          <div className="relative z-10 max-w-2xl mx-auto">
-            <div className="flex items-center justify-between mb-8">
-              <div>
-                <h2 className="font-amigo font-bold text-3xl mb-2">Ready to meet Amigo?</h2>
-                
-              </div>
-              <div className="flex items-center gap-2 bg-white/10 px-3 py-1 rounded-full backdrop-blur-sm border border-white/20">
-                <Heart className="w-4 h-4 text-amigo-primary animate-pulse" />
-                <span className="text-xs font-bold tracking-wider">Free shipping</span>
-              </div>
-            </div>
-
-            <OrderForm setOrderConfetti={setOrderConfetti} />
-          </div>
-        </div>
-      </motion.section>
-
-      <ConfettiPopup visible={orderConfetti.visible} count={orderConfetti.count} setOrderConfetti={setOrderConfetti} />
 
       <footer className="border-y border-amigo-border bg-amigo-surface py-10">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
@@ -322,170 +278,5 @@ export default function Home() {
         </div>
       </footer>
     </div>
-  );
-}
-
-function OrderForm({ setOrderConfetti }: { setOrderConfetti: (v: { visible: boolean; count: number }) => void }) {
-  const [submitting, setSubmitting] = useState(false);
-  const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitting(true);
-    try {
-      const formData = new FormData(e.currentTarget as HTMLFormElement);
-      const res = await fetch("/api/order", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: formData.get("name"),
-          petName: formData.get("petName"),
-          plan: formData.get("plan"),
-          email: formData.get("email"),
-        }),
-      });
-      if (res.ok) {
-        setStatus("success");
-        setOrderConfetti({ visible: true, count: 1 });
-        (e.currentTarget as HTMLFormElement).reset();
-      } else {
-        setStatus("error");
-      }
-    } catch {
-      setStatus("error");
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  if (status === "success") {
-    return (
-      <div className="text-center py-8 animate-bounce">
-        <div className="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-[0_0_30px_rgba(34,197,94,0.6)]">
-          <PawPrint className="w-10 h-10 text-white" />
-        </div>
-        <h3 className="font-amigo font-bold text-xl mb-2 text-amigo-text">Woof! Order placed 🐾</h3>
-        <p className="text-amigo-primary text-sm">Amigo is on the way to your pet.</p>
-        <button
-          onClick={() => setStatus("idle")}
-          className="mt-6 text-xs font-bold text-amigo-primary/80 hover:text-amigo-primary underline"
-        >
-          Place another order
-        </button>
-      </div>
-    );
-  }
-
-  return (
-    <form onSubmit={handleSubmit} className="space-y-4 max-w-lg mx-auto">
-      <div className="grid sm:grid-cols-2 gap-4">
-        <div>
-          <label className="block text-xs font-bold text-white/80 mb-1">Your name</label>
-          <input
-            name="name"
-            required
-            className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:ring-2 focus:ring-amigo-primary outline-none transition-all"
-            placeholder="Alex"
-          />
-        </div>
-        <div>
-          <label className="block text-xs font-bold text-white/80 mb-1">Pet{"\u2019"}s name</label>
-          <input
-            name="petName"
-            required
-            className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:ring-2 focus:ring-amigo-primary outline-none transition-all"
-            placeholder="Buddy"
-          />
-        </div>
-      </div>
-      <div>
-        <label className="block text-xs font-bold text-white/80 mb-1">Email</label>
-        <input
-          name="email"
-          type="email"
-          required
-          className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:ring-2 focus:ring-amigo-primary outline-none transition-all"
-          placeholder="alex@example.com"
-        />
-      </div>
-      <div>
-        <label className="block text-xs font-bold text-white/80 mb-1">Choose your plan</label>
-        <select
-          name="plan"
-          className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white focus:ring-2 focus:ring-amigo-primary outline-none transition-all"
-        >
-          <option value="monthly">Monthly subscription — $20/month</option>
-          <option value="lifetime">Lifetime access — $500</option>
-        </select>
-      </div>
-      <Button type="submit" variant="play" size="lg" className="w-full" disabled={submitting}>
-        {submitting ? "Placing order…" : "Get Amigo"}
-      </Button>
-    </form>
-  );
-}
-
-function ConfettiPopup({ visible, count, setOrderConfetti }: { visible: boolean; count: number; setOrderConfetti: (v: { visible: boolean; count: number }) => void }) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  useEffect(() => {
-    if (!visible || !canvasRef.current) return;
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    const width = window.innerWidth;
-    const height = window.innerHeight;
-    canvas.width = width;
-    canvas.height = height;
-
-    const particles: Array<{ x: number; y: number; vx: number; vy: number; color: string; size: number; angle: number }> = [];
-    const colors = ["#f97316", "#ec4899", "#22d3ee", "#86efac", "#fbbf24", "#a78bfa"];
-    const particleCount = 200 + count * 30;
-
-    for (let i = 0; i < particleCount; i++) {
-      particles.push({
-        x: width / 2,
-        y: height / 2,
-        vx: (Math.random() - 0.5) * 30,
-        vy: (Math.random() - 0.5) * 30 - 10,
-        color: colors[Math.floor(Math.random() * colors.length)],
-        size: Math.random() * 12 + 6,
-        angle: Math.random() * Math.PI * 2,
-      });
-    }
-
-    let opacity = 1;
-    const animate = () => {
-      ctx.clearRect(0, 0, width, height);
-      opacity -= 0.01;
-      if (opacity <= 0) {
-        setOrderConfetti({ visible: false, count: 0 });
-        return;
-      }
-      particles.forEach((p) => {
-        p.x += p.vx;
-        p.y += p.vy;
-        p.vy += 0.2;
-        p.angle += 0.1;
-        ctx.save();
-        ctx.translate(p.x, p.y);
-        ctx.rotate(p.angle);
-        ctx.globalAlpha = opacity;
-        ctx.fillStyle = p.color;
-        ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
-        ctx.restore();
-      });
-      requestAnimationFrame(animate);
-    };
-    animate();
-  }, [visible, count, setOrderConfetti]);
-
-  return (
-    <canvas
-      ref={canvasRef}
-      className="fixed inset-0 z-[100] pointer-events-none"
-      style={{ display: visible ? "block" : "none" }}
-    />
   );
 }

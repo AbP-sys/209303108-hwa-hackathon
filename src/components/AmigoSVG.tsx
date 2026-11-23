@@ -4,9 +4,13 @@ import { motion } from "framer-motion";
 
 interface AmigoSVGProps {
   size?: "lg" | "sm";
+  interactive?: boolean;
 }
 
-export function AmigoSVG({ size = "lg" }: AmigoSVGProps) {
+export function AmigoSVG({
+  size = "lg",
+  interactive = false,
+}: AmigoSVGProps) {
   const isSmall = size === "sm";
   return (
     <motion.div
