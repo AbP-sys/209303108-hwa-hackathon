@@ -71,13 +71,13 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ ...itemVariants.visible }}
             viewport={{ once: true }}
-            className="text-center mb-8"
+            className="text-center mb-4"
           >
-            <h2 className="font-amigo font-bold text-3xl md:text-5xl mb-4 text-amigo-text">Built for connection</h2>
+            <h2 className="font-amigo font-bold text-3xl md:text-5xl mb-2 text-amigo-text">Built for connection</h2>
             <p className="text-amigo-text-muted max-w-2xl mx-auto text-lg">Every detail is designed to help you and your pet feel at home.</p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
             {featureList.map((f) => (
               <motion.div
                 key={f.title}
