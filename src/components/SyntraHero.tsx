@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Heart, PawPrint, Home as HomeIcon, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AmigoSVG } from "@/components/AmigoSVG";
@@ -19,6 +20,8 @@ const metrics = [
 ];
 
 export function SyntraHero({ className = "" }: { className?: string }) {
+  const router = useRouter();
+
   return (
     <section
       className={[
@@ -77,7 +80,7 @@ export function SyntraHero({ className = "" }: { className?: string }) {
               <HomeIcon className="w-4 h-4 mr-1" />
               <span className="text-[10px] uppercase tracking-wider font-semibold">Home</span>
             </Button>
-            <Button variant="play" size="lg" onClick={() => document.getElementById("order")?.scrollIntoView({ behavior: "smooth" })}>
+            <Button variant="play" size="lg" onClick={() => router.push("/checkout?plan=lifetime")}>
               Get Amigo
             </Button>
           </div>
@@ -102,7 +105,7 @@ export function SyntraHero({ className = "" }: { className?: string }) {
               Your pet companion
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button variant="play" size="lg" onClick={() => document.getElementById("order")?.scrollIntoView({ behavior: "smooth" })}>
+              <Button variant="play" size="lg" onClick={() => router.push("/checkout?plan=lifetime")}>
                 Get Amigo <ArrowRight className="w-5 h-5 ml-1" />
               </Button>
             </div>
