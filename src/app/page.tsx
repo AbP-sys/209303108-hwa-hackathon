@@ -13,13 +13,13 @@ import {
 import {
   Heart,
   PawPrint,
-  ShieldCheck,
   Zap,
-  Gift,
   Clock,
   Target,
   Trophy,
   Smile,
+  LayoutGrid,
+  Smartphone,
 } from "lucide-react";
 import { AmigoSVG } from "@/components/AmigoSVG";
 import { SyntraHero } from "@/components/SyntraHero";
@@ -132,9 +132,24 @@ export default function Home() {
               </motion.div>
               <div className="space-y-4">
                 {[
-                  { icon: Zap, color: "text-amigo-secondary", text: "Bouncy, expressive animations" },
-                  { icon: ShieldCheck, color: "text-amigo-accent", text: "Quality materials you can trust" },
-                  { icon: Gift, color: "text-amigo-primary", text: "Arrives in a playful gift box" },
+                  {
+                    icon: LayoutGrid,
+                    color: "text-amigo-secondary",
+                    title: "Smart navigation",
+                    desc: "Lidar-powered mapping helps Amigo find its way around your home.",
+                  },
+                  {
+                    icon: Zap,
+                    color: "text-amigo-accent",
+                    title: "Two way audio",
+                    desc: "Talk to your pet and hear them back, wherever you are.",
+                  },
+                  {
+                    icon: Smartphone,
+                    color: "text-amigo-primary",
+                    title: "Activity insights app",
+                    desc: "Track play, rest, and treat activity in the Amigo app.",
+                  },
                 ].map((item, i) => (
                   <motion.div
                     key={i}
@@ -143,10 +158,13 @@ export default function Home() {
                     viewport={{ once: true }}
                     transition={{ delay: 0.3 + i * 0.1 }}
                     whileHover={{ scale: 1.05 }}
-                    className="flex items-center gap-3 rounded-lg bg-white/40 p-3 transition-colors"
+                    className="flex flex-col gap-1 rounded-2xl bg-white/40 p-5 transition-colors border border-white/30"
                   >
-                    <item.icon className={["w-5 h-5", item.color].join(" ")} />
-                    <span className="font-medium text-amigo-text">{item.text}</span>
+                    <div className="flex items-center gap-3">
+                      <item.icon className={["w-6 h-6", item.color].join(" ")} />
+                      <span className="font-amigo font-bold text-amigo-text">{item.title}</span>
+                    </div>
+                    <p className="text-sm text-amigo-text-muted leading-relaxed">{item.desc}</p>
                   </motion.div>
                 ))}
               </div>
@@ -154,19 +172,19 @@ export default function Home() {
             <div className="relative flex justify-center z-10">
               <div className="relative w-full max-w-xs lg:max-w-sm">
                 <motion.div
-                  animate={{ x: [0, 15, 0, -15, 0], y: [0, -10, 0, 10, 0] }}
-                  transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                  animate={{
+                    x: [0, 25, 0, -25, 0],
+                    y: [0, -18, 0, 18, 0],
+                    rotate: [0, 3, 0, -3, 0],
+                  }}
+                  transition={{
+                    duration: 5,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
                   className="relative z-20"
                 >
                   <AmigoSVG size="sm" />
-                </motion.div>
-                <motion.div
-                  animate={{ y: [0, -12, 0] }}
-                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                  className="absolute -top-4 -right-4 flex items-center gap-2 bg-white border border-teal-200 rounded-full px-4 py-2 shadow-amigo-glow animate-pulse"
-                >
-                  <PawPrint className="w-4 h-4 text-teal-400 fill-teal-400" />
-                  <span className="text-xs font-bold text-amigo-text">Play with me</span>
                 </motion.div>
               </div>
             </div>
