@@ -1,18 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import {
-  Heart,
-  PawPrint,
-  Home as HomeIcon,
-  Gift,
-  ArrowRight,
-  Clock,
-  BarChart3,
-  Zap as ZapIcon,
-} from "lucide-react";
+import { Heart, PawPrint, Home as HomeIcon, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AmigoSVG } from "@/components/AmigoSVG";
 
@@ -28,37 +18,7 @@ const metrics = [
   { label: "Happy tails", value: "99%" },
 ];
 
-const workflowStages = [
-  {
-    title: "Unbox Amigo",
-    desc: "Take your new companion out of the playful gift box.",
-    icon: Gift,
-  },
-  {
-    title: "Meet your pet",
-    desc: "Amigo bonds instantly with your dog's unique personality.",
-    icon: PawPrint,
-  },
-  {
-    title: "Start playing",
-    desc: "Bouncy movements and sounds spark short, joyful sessions.",
-    icon: ZapIcon,
-  },
-  {
-    title: "Treat hunt",
-    desc: "Timed treat dispensing keeps discovery fresh every day.",
-    icon: Clock,
-  },
-  {
-    title: "Grow together",
-    desc: "Activity prompts adapt as your pet learns and explores.",
-    icon: BarChart3,
-  },
-];
-
 export function SyntraHero({ className = "" }: { className?: string }) {
-  const [hoveredStage, setHoveredStage] = useState<number | null>(null);
-
   return (
     <section
       className={[
@@ -168,55 +128,20 @@ export function SyntraHero({ className = "" }: { className?: string }) {
             </div>
           </div>
 
-          {/* Mascot side */}
-          <div className="flex-1 lg:flex-1 flex justify-center relative">
-            <div className="relative w-full max-w-xs lg:max-w-sm">
-              <AmigoSVG size="lg" />
-              <motion.div
-                animate={{ y: [0, -12, 0] }}
-                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute -top-4 -right-4 flex items-center gap-2 bg-white border border-teal-200 rounded-full px-4 py-2 shadow-amigo-glow animate-pulse"
-              >
-                <PawPrint className="w-4 h-4 text-teal-400 fill-teal-400" />
-                <span className="text-xs font-bold text-amigo-text">Adopt me</span>
-              </motion.div>
-            </div>
+        {/* Mascot side */}
+        <div className="flex-1 lg:flex-1 flex justify-center relative">
+          <div className="relative w-full max-w-xs lg:max-w-sm">
+            <AmigoSVG size="lg" />
+            <motion.div
+              animate={{ y: [0, -12, 0] }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute -top-4 -right-4 flex items-center gap-2 bg-white border border-teal-200 rounded-full px-4 py-2 shadow-amigo-glow animate-pulse"
+            >
+              <PawPrint className="w-4 h-4 text-teal-400 fill-teal-400" />
+              <span className="text-xs font-bold text-amigo-text">Adopt me</span>
+            </motion.div>
           </div>
-        </motion.div>
-
-        {/* Workflow stage cards */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="mt-16 relative px-6 max-w-7xl mx-auto"
-        >
-          <div className="grid md:grid-cols-5 gap-4">
-            {workflowStages.map((stage, i) => (
-              <motion.div
-                key={stage.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                whileHover={{ y: -6 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.1 + i * 0.08 }}
-                onMouseEnter={() => setHoveredStage(i)}
-                onMouseLeave={() => setHoveredStage(null)}
-                className={[
-                  "group relative p-5 rounded-2xl bg-amigo-surface border border-amigo-border shadow-sm",
-                  "hover:border-amigo-primary/50 hover:shadow-amigo-glow transition-all duration-300",
-                  hoveredStage === i ? "border-amigo-primary shadow-amigo-glow bg-teal-50" : "",
-                ].join(" ")}
-              >
-                <div className="w-10 h-10 rounded-xl bg-amigo-primary/10 border border-amigo-border flex items-center justify-center mb-3 group-hover:bg-amigo-primary group-hover:text-white transition-colors duration-300">
-                  <stage.icon className="w-5 h-5 text-amigo-primary group-hover:text-white" />
-                </div>
-                <h3 className="font-amigo font-bold text-sm text-amigo-text mb-1">{stage.title}</h3>
-                <p className="text-xs text-amigo-text-muted leading-relaxed">{stage.desc}</p>
-              </motion.div>
-            ))}
-          </div>
+        </div>
         </motion.div>
       </div>
     </section>

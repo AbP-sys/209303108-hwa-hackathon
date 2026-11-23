@@ -52,30 +52,6 @@ const featureList = [
   },
 ];
 
-const plans = [
-  {
-    name: "Amigo Starter",
-    price: "$49",
-    desc: "Perfect first companion for a new pet.",
-    features: ["Playful mascot", "Warm welcome", "Soft finish"],
-    popular: false,
-  },
-  {
-    name: "Amigo Buddy",
-    price: "$79",
-    desc: "The full companion experience.",
-    features: ["Everything in Starter", "Animated expressions", "Premium gift box"],
-    popular: true,
-  },
-  {
-    name: "Amigo Pal",
-    price: "$119",
-    desc: "For devoted pet families.",
-    features: ["Everything in Buddy", "Extra accessories", "Priority support"],
-    popular: false,
-  },
-];
-
 export default function Home() {
   return (
     <div className="relative min-h-screen flex flex-col overflow-x-hidden bg-amigo-bg text-amigo-text selection:bg-amigo-primary/30">
@@ -130,10 +106,10 @@ export default function Home() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="px-6 max-w-7xl mx-auto py-24 bg-amigo-surface rounded-[3rem] my-16 border border-amigo-border overflow-hidden"
+          className="px-6 max-w-7xl mx-auto py-24 bg-amigo-surface rounded-[3rem] my-16 border border-amigo-border overflow-hidden relative"
         >
           <div className="grid lg:grid-cols-2 gap-16 items-center p-8">
-            <div>
+            <div className="relative z-10">
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
@@ -166,7 +142,8 @@ export default function Home() {
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.3 + i * 0.1 }}
-                    className="flex items-center gap-3"
+                    whileHover={{ scale: 1.05 }}
+                    className="flex items-center gap-3 rounded-lg bg-white/40 p-3 transition-colors"
                   >
                     <item.icon className={["w-5 h-5", item.color].join(" ")} />
                     <span className="font-medium text-amigo-text">{item.text}</span>
@@ -174,8 +151,24 @@ export default function Home() {
                 ))}
               </div>
             </div>
-            <div className="relative flex justify-center">
-              <AmigoSVG size="sm" />
+            <div className="relative flex justify-center z-10">
+              <div className="relative w-full max-w-xs lg:max-w-sm">
+                <motion.div
+                  animate={{ x: [0, 15, 0, -15, 0], y: [0, -10, 0, 10, 0] }}
+                  transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                  className="relative z-20"
+                >
+                  <AmigoSVG size="sm" />
+                </motion.div>
+                <motion.div
+                  animate={{ y: [0, -12, 0] }}
+                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                  className="absolute -top-4 -right-4 flex items-center gap-2 bg-white border border-teal-200 rounded-full px-4 py-2 shadow-amigo-glow animate-pulse"
+                >
+                  <PawPrint className="w-4 h-4 text-teal-400 fill-teal-400" />
+                  <span className="text-xs font-bold text-amigo-text">Play with me</span>
+                </motion.div>
+              </div>
             </div>
           </div>
         </motion.section>
@@ -195,11 +188,28 @@ export default function Home() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="font-amigo font-bold text-3xl md:text-5xl mb-4 text-amigo-text">Choose your companion</h2>
-            <p className="text-amigo-text-muted max-w-2xl mx-auto text-lg">Ready to ship, built to bond.</p>
+            <h2 className="font-amigo font-bold text-3xl md:text-5xl mb-4 text-amigo-text">Bring Amigo home</h2>
+            <p className="text-amigo-text-muted max-w-2xl mx-auto text-lg">Pick the plan that fits you and your pet.</p>
           </motion.div>
-          <div className="grid md:grid-cols-3 gap-6">
-            {plans.map((plan) => (
+          <div className="grid md:grid-cols-2 gap-8">
+            {[
+              {
+                name: "Amigo Monthly",
+                price: "$20",
+                unit: "/month",
+                desc: "A playful subscription that keeps the fun going every month.",
+                popular: false,
+                features: ["Amigo companion", "Monthly treat drops", "App access", "Community events"],
+              },
+              {
+                name: "Amigo Forever",
+                price: "$500",
+                unit: "",
+                desc: "One-time purchase. Amigo is yours for life — no recurring fees.",
+                popular: true,
+                features: ["Amigo companion", "All accessories", "Lifetime app access", "Priority support"],
+              },
+            ].map((plan) => (
               <motion.div
                 key={plan.name}
                 variants={itemVariants}
@@ -214,14 +224,14 @@ export default function Home() {
                   {plan.popular && (
                     <div className="absolute -top-4 left-1/2 -translate-x-1/2 flex items-center gap-1 bg-amigo-primary text-white px-3 py-1 rounded-full text-xs font-bold shadow-amigo-secondary-glow">
                       <span className="w-2 h-2 bg-white rounded-full animate-pulse" />
-                      Most popular
+                      Best value
                     </div>
                   )}
                   <CardTitle className="mb-1">{plan.name}</CardTitle>
                   <CardDescription>{plan.desc}</CardDescription>
                 </CardHeader>
                 <CardContent className="flex-1 flex flex-col">
-                  <div className="mb-6 text-4xl font-amigo font-bold text-amigo-text">{plan.price}</div>
+                  <div className="mb-6 text-4xl font-amigo font-bold text-amigo-text">{plan.price}<span className="text-lg text-amigo-text-muted">{plan.unit}</span></div>
                   <ul className="space-y-3 text-sm text-amigo-text-muted flex-1">
                     {plan.features.map((f) => (
                       <li key={f} className="flex items-center gap-2">
